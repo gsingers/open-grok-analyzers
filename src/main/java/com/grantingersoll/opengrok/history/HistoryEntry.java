@@ -1,0 +1,218 @@
+/*
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
+ *
+ * See LICENSE.txt included in this distribution for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at LICENSE.txt.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ */
+
+/*
+ * Copyright (c) 2006, 2012, Oracle and/or its affiliates. All rights reserved.
+ */
+/*
+ * Copyright 2006 Trond Norbye.  All rights reserved.
+ */
+package com.grantingersoll.opengrok.history;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.Level;
+
+
+/**
+ * Collect all information of a given revision
+ *
+ * @author Trond Norbye
+ */
+public class HistoryEntry {
+  private transient static Logger log = LoggerFactory.getLogger(HistoryEntry.class);
+    private String revision;
+    private Date date;
+    private String author;
+    private String tags;
+
+    @SuppressWarnings("PMD.AvoidStringBufferField")
+    private final StringBuffer message;
+
+    private boolean active;
+    private SortedSet<String> files;
+    private List<String> changeRequests;
+
+    /** Creates a new instance of HistoryEntry */
+    public HistoryEntry() {
+        message = new StringBuffer();
+        files = new TreeSet<String>();
+        changeRequests = new ArrayList<String>();
+    }
+    
+    /** Copy constructor */
+    public HistoryEntry(HistoryEntry that) {
+        this.revision = that.revision;
+        this.date = that.date;
+        this.author = that.author;
+        this.tags = that.tags;
+        this.message = that.message;
+        this.active = that.active;
+        this.files = that.files;
+        this.changeRequests = that.changeRequests;
+    }
+
+    public HistoryEntry(String revision, Date date, String author,
+            String tags, String message, boolean active) {
+        this.revision = revision;
+        setDate(date);
+        this.author = author;
+        this.tags = tags;
+        this.message = new StringBuffer(message);
+        this.active = active;
+        this.files = new TreeSet<String>();
+        this.changeRequests = new ArrayList<String>();
+    }
+
+    public String getLine() {
+        return revision + " " + date + " " + author + " " + message + "\n";
+    }
+
+    public void dump() {
+
+        log.debug("HistoryEntry : revision       = {0}", revision);
+        log.debug("HistoryEntry : tags           = {0}", tags);
+        log.debug("HistoryEntry : date           = {0}", date);
+        log.debug("HistoryEntry : author         = {0}", author);
+        log.debug("HistoryEntry : active         = {0}", (active ?
+                "True" : "False"));
+        String[] lines = message.toString().split("\n");
+        String separator = "=";
+        for (String line : lines) {
+            log.debug("HistoryEntry : message        {0} {1}",
+                    new Object[]{separator, line});
+            separator = ">";
+        }
+        separator = "=";
+        for (String cr : changeRequests) {
+            log.debug("HistoryEntry : changeRequests {0} {1}",
+                    new Object[]{separator, cr});
+            separator = ">";
+        }
+        separator = "=";
+        for (String file : files) {
+            log.debug("HistoryEntry : files          {0} {1}",
+                    new Object[]{separator, file});
+            separator = ">";
+        }
+   }
+
+    public String getAuthor() {
+        return author;
+    }
+    
+    public String getTags() {
+        return tags;
+    }
+
+    public Date getDate() {
+        return (date == null) ? null : (Date) date.clone();
+    }
+
+    public String getMessage() {
+        return message.toString().trim();
+    }
+
+    public String getRevision() {
+        return revision;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+    
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public final void setDate(Date date) {
+        if (date == null) {
+            this.date = null;
+        } else {
+            this.date = (Date) date.clone();
+        }
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setMessage(String message) {
+        this.message.setLength(0);
+        this.message.append(message);
+    }
+
+    public void setRevision(String revision) {
+        this.revision = revision;
+    }
+
+    public void appendMessage(String message) {
+        this.message.append(message);
+        this.message.append("\n");
+    }
+
+    public void addFile(String file) {
+        files.add(file);
+    }
+
+    public SortedSet<String> getFiles() {
+        return files;
+    }
+
+    public void setFiles(SortedSet<String> files) {
+        this.files = files;
+    }
+
+    @Override
+    public String toString() {
+        return getLine();
+    }
+
+    public void addChangeRequest(String changeRequest) {
+        if (!changeRequests.contains(changeRequest)) {
+            changeRequests.add(changeRequest);
+        }
+    }
+
+    public List<String> getChangeRequests() {
+        return changeRequests;
+    }
+
+    public void setChangeRequests(List<String> changeRequests) {
+        this.changeRequests = changeRequests;
+    }
+
+    /**
+     * Remove "unneeded" info such as multiline history and files list
+     */
+    public void strip() {
+        files.clear();
+        tags = null;
+    }
+}
