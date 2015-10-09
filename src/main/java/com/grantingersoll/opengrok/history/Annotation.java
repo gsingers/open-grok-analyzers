@@ -37,7 +37,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import java.util.logging.Logger;
-import org.opensolaris.opengrok.web.Util;
+import com.grantingersoll.opengrok.web.Util;
 
 /**
  * Class representing file annotation, i.e., revision and author for the last

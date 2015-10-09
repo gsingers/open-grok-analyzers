@@ -25,8 +25,6 @@ package com.grantingersoll.opengrok.index;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.opensolaris.opengrok.index.IgnoredDirs;
-import org.opensolaris.opengrok.index.IgnoredFiles;
 
 
 /**
