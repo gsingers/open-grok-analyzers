@@ -27,7 +27,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-import com.grantingersoll.opengrok.analysis.StreamSource;
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.ExpandTabsReader;
+import com.grantingersoll.opengrok.analysis.IteratorReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.TextField;
@@ -38,6 +40,7 @@ import com.grantingersoll.opengrok.analysis.IteratorReader;
 import com.grantingersoll.opengrok.analysis.JFlexScopeParser;
 import com.grantingersoll.opengrok.analysis.JFlexXref;
 import com.grantingersoll.opengrok.analysis.Scopes;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.analysis.TextAnalyzer;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;

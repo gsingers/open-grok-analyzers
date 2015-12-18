@@ -26,6 +26,10 @@ package com.grantingersoll.opengrok.analysis.document;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
@@ -42,7 +46,7 @@ public class TroffAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public TroffAnalyzerFactory() {
-        super(null, null, null, MAGICS, null, "text/plain", Genre.PLAIN, name);
+        super(null, null, null, MAGICS, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
     }
 
     @Override

@@ -26,14 +26,13 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-
-import com.grantingersoll.opengrok.analysis.FileAnalyzer;
-import com.grantingersoll.opengrok.analysis.StreamSource;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.tools.bzip2.CBZip2InputStream;
 import com.grantingersoll.opengrok.analysis.AnalyzerGuru;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 
 /**
  * Analyzes a BZip2 file Created on September 22, 2005

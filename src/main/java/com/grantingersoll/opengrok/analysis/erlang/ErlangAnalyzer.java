@@ -28,8 +28,11 @@ import java.io.Reader;
 import java.io.Writer;
 
 import com.grantingersoll.opengrok.analysis.Definitions;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.JFlexXref;
+import com.grantingersoll.opengrok.analysis.plain.AbstractSourceCodeAnalyzer;
+import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import com.grantingersoll.opengrok.analysis.JFlexXref;
 import com.grantingersoll.opengrok.analysis.plain.AbstractSourceCodeAnalyzer;
 import com.grantingersoll.opengrok.configuration.Project;

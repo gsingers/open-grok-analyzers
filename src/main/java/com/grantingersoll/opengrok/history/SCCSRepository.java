@@ -33,20 +33,28 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 
 /**
  * This class gives access to repositories built on top of SCCS (including
  * TeamWare).
  */
 public class SCCSRepository extends Repository {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SCCSRepository.class);
+
     private static final long serialVersionUID = 1L;
-    /** The property name used to obtain the client command for this repository. */
-    public static final String CMD_PROPERTY_KEY =
-        "com.grantingersoll.opengrok.history.SCCS";
-    /** The command to use to access the repository if none was given explicitly */
+    /**
+     * The property name used to obtain the client command for this repository.
+     */
+    public static final String CMD_PROPERTY_KEY
+            = "com.grantingersoll.opengrok.history.SCCS";
+    /**
+     * The command to use to access the repository if none was given explicitly
+     */
     public static final String CMD_FALLBACK = "sccs";
 
     private Map<String, String> authors_cache;
@@ -61,27 +69,29 @@ public class SCCSRepository extends Repository {
         try {
             File history = SCCSHistoryParser.getSCCSFile(parent, basename);
             ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-            return SCCSget.getRevision(cmd, history, rev);
+            return SCCSget.getRevision(RepoCommand, history, rev);
         } catch (FileNotFoundException ex) {
             return null;
         } catch (IOException ex) {
-            OpenGrokLogger.getLogger().log(Level.WARNING,
-                "An error occured while getting revision", ex);
+            LOGGER.log(Level.WARNING,
+                    "An error occured while getting revision", ex);
             return null;
         }
     }
 
-     /** Pattern used to extract revision from sccs get */
-    private static final Pattern AUTHOR_PATTERN =
-        Pattern.compile("^([\\d.]+)\\s+(\\S+)");
+    /**
+     * Pattern used to extract revision from sccs get
+     */
+    private static final Pattern AUTHOR_PATTERN
+            = Pattern.compile("^([\\d.]+)\\s+(\\S+)");
 
     private void getAuthors(File file) throws IOException {
         //System.out.println("Alloc Authors cache");
-        authors_cache = new HashMap<String, String>();
+        authors_cache = new HashMap<>();
 
-        ArrayList<String> argv = new ArrayList<String>();
+        ArrayList<String> argv = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        argv.add(cmd);
+        argv.add(RepoCommand);
         argv.add("prs");
         argv.add("-e");
         argv.add("-d");
@@ -105,9 +115,9 @@ public class SCCSRepository extends Repository {
                         String auth = matcher.group(2);
                         authors_cache.put(rev, auth);
                     } else {
-                        OpenGrokLogger.getLogger().log(Level.SEVERE,
-                            "Error: did not find authors in line {0}: [{1}]",
-                            new Object[]{lineno, line});
+                        LOGGER.log(Level.SEVERE,
+                                "Error: did not find authors in line {0}: [{1}]",
+                                new Object[]{lineno, line});
                     }
                 }
             }
@@ -122,9 +132,11 @@ public class SCCSRepository extends Repository {
         }
     }
 
-    /** Pattern used to extract revision from sccs get */
-    private static final Pattern ANNOTATION_PATTERN =
-        Pattern.compile("^([\\d.]+)\\s+");
+    /**
+     * Pattern used to extract revision from sccs get
+     */
+    private static final Pattern ANNOTATION_PATTERN
+            = Pattern.compile("^([\\d.]+)\\s+");
 
     /**
      * Annotate the specified file/revision.
@@ -132,6 +144,7 @@ public class SCCSRepository extends Repository {
      * @param file file to annotate
      * @param revision revision to annotate
      * @return file annotation
+     * @throws java.io.IOException
      */
     @Override
     public Annotation annotate(File file, String revision) throws IOException {
@@ -139,9 +152,9 @@ public class SCCSRepository extends Repository {
         //System.out.println("annotating " + file.getCanonicalPath());
         getAuthors(file);
 
-        ArrayList<String> argv = new ArrayList<String>();
+        ArrayList<String> argv = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        argv.add(cmd);
+        argv.add(RepoCommand);
         argv.add("get");
         argv.add("-m");
         argv.add("-p");
@@ -171,9 +184,9 @@ public class SCCSRepository extends Repository {
 
                         a.addLine(rev, author, true);
                     } else {
-                        OpenGrokLogger.getLogger().log(Level.SEVERE,
-                            "Error: did not find annotations in line {0}: [{1}]",
-                            new Object[]{lineno, line});
+                        LOGGER.log(Level.SEVERE,
+                                "Error: did not find annotations in line {0}: [{1}]",
+                                new Object[]{lineno, line});
                     }
                 }
             }
@@ -212,30 +225,30 @@ public class SCCSRepository extends Repository {
 
     @Override
     boolean isRepositoryFor(File file) {
-       if (file.isDirectory()) {
-         File f = new File(file, "codemgr_wsdata");
-         if (f.isDirectory()) {
-             return true;
-         }
-         f = new File(file, "Codemgr_wsdata");
-         if (f.isDirectory()) {
-             return true;
-         }
-         return new File(file, "SCCS").isDirectory();
-       }
-       return false;
+        if (file.isDirectory()) {
+            File f = new File(file, "codemgr_wsdata");
+            if (f.isDirectory()) {
+                return true;
+            }
+            f = new File(file, "Codemgr_wsdata");
+            if (f.isDirectory()) {
+                return true;
+            }
+            return new File(file, "SCCS").isDirectory();
+        }
+        return false;
     }
 
     @Override
     public boolean isWorking() {
         if (working == null) {
             ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-            working = checkCmd(cmd, "help", "help");
-            if (!working.booleanValue()) {
-                working = checkCmd(cmd, "--version");
+            working = checkCmd(RepoCommand, "help", "help");
+            if (!working) {
+                working = checkCmd(RepoCommand, "--version");
             }
         }
-        return working.booleanValue();
+        return working;
     }
 
     @Override
@@ -250,24 +263,24 @@ public class SCCSRepository extends Repository {
 
     @Override
     String determineParent() throws IOException {
-        File parentFile = new File(directoryName + File.separator +
-            "Codemgr_wsdata" + File.separator + "parent");
+        File parentFile = new File(directoryName + File.separator
+                + "Codemgr_wsdata" + File.separator + "parent");
         String parent = null;
 
         if (parentFile.isFile()) {
             String line;
             try (BufferedReader in = new BufferedReader(new FileReader(parentFile))) {
                 if ((line = in.readLine()) == null) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Failed to get parent for {0} (cannot read line)", directoryName);
+                    LOGGER.log(Level.WARNING,
+                            "Failed to get parent for {0} (cannot read line)", directoryName);
                 }
                 if (!line.startsWith("VERSION")) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Failed to get parent for {0} (first line does not start with VERSION)", directoryName);
+                    LOGGER.log(Level.WARNING,
+                            "Failed to get parent for {0} (first line does not start with VERSION)", directoryName);
                 }
                 if ((parent = in.readLine()) == null) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Failed to get parent for {0} (cannot read second line)", directoryName);
+                    LOGGER.log(Level.WARNING,
+                            "Failed to get parent for {0} (cannot read second line)", directoryName);
                 }
             }
         }
@@ -280,4 +293,3 @@ public class SCCSRepository extends Repository {
         return null;
     }
 }
-

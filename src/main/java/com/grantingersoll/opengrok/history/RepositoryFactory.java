@@ -1,6 +1,3 @@
-package com.grantingersoll.opengrok.history;
-
-
 /*
  * CDDL HEADER START
  *
@@ -24,21 +21,17 @@ package com.grantingersoll.opengrok.history;
  * Copyright (c) 2008, 2012, Oracle and/or its affiliates. All rights reserved.
  */
 
-import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
-
+package com.grantingersoll.opengrok.history;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 
 /**
  * This is a factory class for the different repositories.
@@ -46,7 +39,9 @@ import org.slf4j.LoggerFactory;
  * @author austvik
  */
 public final class RepositoryFactory {
-  private transient static Logger log = LoggerFactory.getLogger(RepositoryFactory.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryFactory.class);
+
     private static Repository repositories[] = {
         new MercurialRepository(),
         new AccuRevRepository(),
@@ -96,12 +91,13 @@ public final class RepositoryFactory {
                 try {
                     res.setDirectoryName(file.getCanonicalPath());
                 } catch (IOException e) {
-                    log.error(
-                            "Failed to get canonical path name for " + file.getAbsolutePath(), e);
+                    LOGGER.log(Level.SEVERE,
+                        "Failed to get canonical path name for " + file.getAbsolutePath(), e);
                 }
 
                 if (!res.isWorking()) {
-                    log.warn(
+                    LOGGER.log(
+                            Level.WARNING,
                             "{0} not working (missing binaries?): {1}",
                             new Object[] {
                                 res.getClass().getSimpleName(),
@@ -117,8 +113,8 @@ public final class RepositoryFactory {
                     try {
                         res.setParent(res.determineParent());
                     } catch (IOException ex) {
-                        log.error(null, ex);
-                        log.warn(
+                        LOGGER.log(Level.SEVERE, null, ex);
+                        LOGGER.log(Level.WARNING,
                             "Failed to get parent for " + file.getAbsolutePath());
                     }
                 }
@@ -127,7 +123,7 @@ public final class RepositoryFactory {
                     try {
                         res.setBranch(res.determineBranch());
                     } catch (IOException ex) {
-                        log.warn(
+                        LOGGER.log(Level.WARNING,
                             "Failed to get branch for " + file.getAbsolutePath());
                     }
                 }

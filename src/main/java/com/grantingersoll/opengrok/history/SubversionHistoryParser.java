@@ -34,10 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import com.grantingersoll.opengrok.OpenGrokLogger;
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 import com.grantingersoll.opengrok.util.Interner;
 import org.xml.sax.Attributes;
@@ -49,6 +50,8 @@ import org.xml.sax.ext.DefaultHandler2;
  * @author Trond Norbye
  */
 class SubversionHistoryParser implements Executor.StreamHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubversionHistoryParser.class);
 
     private SAXParser saxParser = null;
     private Handler handler;
@@ -91,7 +94,7 @@ class SubversionHistoryParser implements Executor.StreamHandler {
                 try {
                     entry.setDate(format.parse(s));
                 } catch (ParseException ex) {
-                    OpenGrokLogger.getLogger().log(Level.SEVERE, "Failed to parse: " + s, ex);
+                    LOGGER.log(Level.SEVERE, "Failed to parse: " + s, ex);
                 }
             } else if ("path".equals(qname)) {
                 /*
@@ -109,7 +112,7 @@ class SubversionHistoryParser implements Executor.StreamHandler {
                     path = stringInterner.intern(path);
                     entry.addFile(path);
                 } else {
-                    OpenGrokLogger.getLogger().log(Level.FINER, "Skipping file outside repository: " + s);
+                    LOGGER.log(Level.FINER, "Skipping file outside repository: " + s);
                 }
             } else if ("msg".equals(qname)) {
                 entry.setMessage(s);
@@ -185,7 +188,7 @@ class SubversionHistoryParser implements Executor.StreamHandler {
             initSaxParser();
             saxParser.parse(new BufferedInputStream(input), handler);
         } catch (Exception e) {
-            OpenGrokLogger.getLogger().log(Level.SEVERE, "An error occurred while parsing the xml output", e);
+            LOGGER.log(Level.SEVERE, "An error occurred while parsing the xml output", e);
         }
     }
 

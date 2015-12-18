@@ -24,6 +24,7 @@
 package com.grantingersoll.opengrok.analysis.executables;
 
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 
 public final class JarAnalyzerFactory extends FileAnalyzerFactory {
@@ -39,7 +40,7 @@ public final class JarAnalyzerFactory extends FileAnalyzerFactory {
 
     private JarAnalyzerFactory() {
         // no magics for jar files, ZipAnalyzerFactory will handle it for us
-        super(null, null, SUFFIXES, null, null, null, FileAnalyzer.Genre.XREFABLE, name);
+        super(null, null, SUFFIXES, null, null, null, Genre.XREFABLE, name);
     }
 
     @Override

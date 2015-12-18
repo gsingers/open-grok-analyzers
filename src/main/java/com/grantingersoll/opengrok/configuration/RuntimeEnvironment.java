@@ -43,16 +43,21 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
 
 import com.grantingersoll.opengrok.history.HistoryGuru;
 import com.grantingersoll.opengrok.history.RepositoryInfo;
 import com.grantingersoll.opengrok.index.Filter;
-import com.grantingersoll.opengrok.index.IgnoredNames;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 import com.grantingersoll.opengrok.util.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.grantingersoll.opengrok.history.HistoryGuru;
+import com.grantingersoll.opengrok.history.RepositoryInfo;
+import com.grantingersoll.opengrok.index.Filter;
+import com.grantingersoll.opengrok.index.IgnoredNames;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.Executor;
+import com.grantingersoll.opengrok.util.IOUtils;
 
 /**
  * The RuntimeEnvironment class is used as a placeholder for the current
@@ -60,9 +65,10 @@ import org.slf4j.LoggerFactory;
  */
 public final class RuntimeEnvironment {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeEnvironment.class);
+
     private Configuration configuration;
     private final ThreadLocal<Configuration> threadConfig;
-    private transient static Logger log = LoggerFactory.getLogger(RuntimeEnvironment.class);
     private static RuntimeEnvironment instance = new RuntimeEnvironment();
     private static ExecutorService historyExecutor = null;
     private static ExecutorService historyRenamedExecutor = null;
@@ -76,7 +82,7 @@ public final class RuntimeEnvironment {
                 try {
                     num = Integer.valueOf(total);
                 } catch (Throwable t) {
-                    log.warn("Failed to parse the number of " +
+                    LOGGER.log(Level.WARNING, "Failed to parse the number of " +
                         "cache threads to use for cache creation", t);
                 }
             }
@@ -93,7 +99,7 @@ public final class RuntimeEnvironment {
 
         return historyExecutor;
     }
- 
+
     /* Get thread pool used for history generation of renamed files. */
     public static synchronized ExecutorService getHistoryRenamedExecutor() {
         if (historyRenamedExecutor == null) {
@@ -103,7 +109,7 @@ public final class RuntimeEnvironment {
                 try {
                     num = Integer.valueOf(total);
                 } catch (Throwable t) {
-                    log.warn("Failed to parse the number of " +
+                    LOGGER.log(Level.WARNING, "Failed to parse the number of " +
                         "cache threads to use for cache creation of renamed files", t);
                 }
             }
@@ -117,14 +123,14 @@ public final class RuntimeEnvironment {
                     }
                 });
         }
- 
+
         return historyRenamedExecutor;
     }
 
     public static synchronized void freeHistoryExecutor() {
         historyExecutor = null;
     }
- 
+
     public static synchronized void destroyRenamedHistoryExecutor() throws InterruptedException {
         if (historyRenamedExecutor != null) {
             historyRenamedExecutor.shutdown();
@@ -166,7 +172,7 @@ public final class RuntimeEnvironment {
             }
             return file.getCanonicalPath();
         } catch (IOException ex) {
-            log.error("Failed to get canonical path", ex);
+            LOGGER.log(Level.SEVERE, "Failed to get canonical path", ex);
             return s;
         }
     }
@@ -384,8 +390,8 @@ public final class RuntimeEnvironment {
 
         executor.exec(false);
         String output = executor.getOutputString();
-        if (output == null || output.indexOf("Exuberant Ctags") == -1) {
-            log.error("Error: No Exuberant Ctags found in PATH !\n"
+        if (output == null || ( output.indexOf("Exuberant Ctags") == -1 && output.indexOf("Universal Ctags") == -1 ) ) {
+            LOGGER.log(Level.SEVERE, "Error: No Exuberant Ctags found in PATH !\n"
                     + "(tried running " + "{0}" + ")\n"
                     + "Please use option -c to specify path to a good "
                     + "Exuberant Ctags program.\n"
@@ -395,6 +401,23 @@ public final class RuntimeEnvironment {
         }
 
         return ret;
+    }
+
+    /**
+     * Are we using Universal ctags?
+     *
+     * @return true if we are using Universal ctags
+     */
+    public boolean isUniversalCtags() {
+        boolean ret = false;
+        Executor executor = new Executor(new String[]{getCtags(), "--version"});
+
+        executor.exec(false);
+        String output = executor.getOutputString();
+        if (output.indexOf("Universal Ctags") != -1 ) {
+	  ret = true;
+	}
+	return ret;
     }
 
     /**
@@ -532,7 +555,7 @@ public final class RuntimeEnvironment {
         return threadConfig.get().getDefaultProject();
     }
 
-    /**     
+    /**
      *
      * @return at what size (in MB) we should flush the buffer
      */
@@ -796,19 +819,19 @@ public final class RuntimeEnvironment {
     public void setIndexVersionedFilesOnly(boolean indexVersionedFilesOnly) {
         threadConfig.get().setIndexVersionedFilesOnly(indexVersionedFilesOnly);
     }
-    
+
     public boolean isTagsEnabled() {
         return threadConfig.get().isTagsEnabled();
     }
-    
+
     public void setTagsEnabled(boolean tagsEnabled) {
         threadConfig.get().setTagsEnabled(tagsEnabled);
     }
-    
+
     public boolean isScopesEnabled() {
         return threadConfig.get().isScopesEnabled();
     }
-    
+
     public void setScopesEnabled(boolean scopesEnabled) {
         threadConfig.get().setScopesEnabled(scopesEnabled);
     }
@@ -986,7 +1009,7 @@ public final class RuntimeEnvironment {
                         try (Socket s = sock.accept();
                                 BufferedInputStream in = new BufferedInputStream(s.getInputStream())) {
                             bos.reset();
-                            log.debug( "OpenGrok: Got request from {0}",
+                            LOGGER.log(Level.FINE, "OpenGrok: Got request from {0}",
                                     s.getInetAddress().getHostAddress());
                             byte[] buf = new byte[1024];
                             int len;
@@ -994,8 +1017,8 @@ public final class RuntimeEnvironment {
                                 bos.write(buf, 0, len);
                             }
                             buf = bos.toByteArray();
-                            if (log.isDebugEnabled()) {
-                                log.debug("new config:{0}", new String(buf));
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE, "new config:{0}", new String(buf));
                             }
                             Object obj;
                             try (XMLDecoder d = new XMLDecoder(new ByteArrayInputStream(buf))) {
@@ -1004,22 +1027,22 @@ public final class RuntimeEnvironment {
 
                             if (obj instanceof Configuration) {
                                 setConfiguration((Configuration) obj);
-                                log.info( "Configuration updated: {0}",
+                                LOGGER.log(Level.INFO, "Configuration updated: {0}",
                                     configuration.getSourceRoot());
                             }
                         } catch (IOException e) {
-                            log.error("Error reading config file: ", e);
+                            LOGGER.log(Level.SEVERE, "Error reading config file: ", e);
                         } catch (RuntimeException e) {
-                            log.error("Error parsing config file: ", e);
+                            LOGGER.log(Level.SEVERE, "Error parsing config file: ", e);
                         }
                     }
                 }
             });
             t.start();
         } catch (UnknownHostException ex) {
-            log.debug("Problem resolving sender: ", ex);
+            LOGGER.log(Level.FINE, "Problem resolving sender: ", ex);
         } catch (IOException ex) {
-            log.debug("I/O error when waiting for config: ", ex);
+            LOGGER.log(Level.FINE, "I/O error when waiting for config: ", ex);
         }
 
         if (!ret && configServerSocket != null) {

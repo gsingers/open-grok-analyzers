@@ -24,6 +24,7 @@
 package com.grantingersoll.opengrok.analysis.archive;
 
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 
 public class BZip2AnalyzerFactory extends FileAnalyzerFactory {

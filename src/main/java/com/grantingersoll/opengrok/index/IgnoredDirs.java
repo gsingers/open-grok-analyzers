@@ -1,6 +1,3 @@
-package com.grantingersoll.opengrok.index;
-
-
 /*
  * CDDL HEADER START
  *
@@ -23,10 +20,7 @@ package com.grantingersoll.opengrok.index;
 /*
  * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
  */
-
-import java.io.File;
-
-
+package com.grantingersoll.opengrok.index;
 
 import java.io.File;
 
@@ -41,7 +35,7 @@ public final class IgnoredDirs extends Filter {
     private static final String[] defaultPatternsDirs = {
         "SCCS",
         "CVS",
-        "RCS",
+        "RCS",  
         // Teamware
         "Codemgr_wsdata",
         "deleted_files",

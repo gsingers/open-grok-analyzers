@@ -26,6 +26,10 @@ package com.grantingersoll.opengrok.analysis.java;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
@@ -38,11 +42,12 @@ public class JavaAnalyzerFactory extends FileAnalyzerFactory {
     private static final String name = "Java";
     
     private static final String[] SUFFIXES = {
-        "JAVA"
+        "JAVA",
+        "AIDL",
     };
 
     public JavaAnalyzerFactory() {
-        super(null, null, SUFFIXES, null, null, "text/plain", Genre.PLAIN, name);
+        super(null, null, SUFFIXES, null, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
     }
 
     @Override

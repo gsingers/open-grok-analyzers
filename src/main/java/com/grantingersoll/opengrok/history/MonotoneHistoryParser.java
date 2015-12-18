@@ -35,8 +35,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import java.util.logging.Logger;
+
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.Executor;
+import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 
 /**
@@ -45,6 +50,8 @@ import com.grantingersoll.opengrok.util.Executor;
  * @author Trond Norbye
  */
 class MonotoneHistoryParser implements Executor.StreamHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MonotoneHistoryParser.class);
 
     private List<HistoryEntry> entries = new ArrayList<HistoryEntry>(); //NOPMD
     private final MonotoneRepository repository;
@@ -134,7 +141,7 @@ class MonotoneHistoryParser implements Executor.StreamHandler {
                         try {
                             date = df.parse(s.substring("date:".length()).trim());
                         } catch (ParseException pe) {
-                            OpenGrokLogger.getLogger().log(Level.WARNING, "Could not parse date: " + s, pe);
+                            LOGGER.log(Level.WARNING, "Could not parse date: " + s, pe);
                         }
                         entry.setDate(date);
                         ++state;
@@ -168,7 +175,7 @@ class MonotoneHistoryParser implements Executor.StreamHandler {
                     entry.appendMessage(s);
                     break;
                 default:
-                    OpenGrokLogger.getLogger().warning("Unknown parser state: " + state);
+                    LOGGER.warning("Unknown parser state: " + state);
                     break;
             }
         }

@@ -32,6 +32,12 @@ import com.grantingersoll.opengrok.analysis.JFlexXref;
 import com.grantingersoll.opengrok.analysis.plain.AbstractSourceCodeAnalyzer;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.JFlexXref;
+import com.grantingersoll.opengrok.analysis.plain.AbstractSourceCodeAnalyzer;
+import com.grantingersoll.opengrok.configuration.Project;
+import com.grantingersoll.opengrok.history.Annotation;
 
 /**
  * An Analyzer for Fortran type of files

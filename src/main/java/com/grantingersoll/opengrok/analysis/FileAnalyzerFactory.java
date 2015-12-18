@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.grantingersoll.opengrok.configuration.Project;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
+import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;
 
 /**

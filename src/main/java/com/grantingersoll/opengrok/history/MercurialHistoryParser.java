@@ -34,14 +34,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import java.util.logging.Logger;
+
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.Executor;
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 
 /**
  * Parse a stream of mercurial log comments.
  */
 class MercurialHistoryParser implements Executor.StreamHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MercurialHistoryParser.class);
 
     /** Prefix which identifies lines with the description of a commit. */
     private static final String DESC_PREFIX = "description: ";
@@ -123,8 +129,8 @@ class MercurialHistoryParser implements Executor.StreamHandler {
                 try {
                     date = df.parse(s.substring(MercurialRepository.DATE.length()).trim());
                 } catch (ParseException pe) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Could not parse date: " + s, pe);
+                    LOGGER.log(Level.WARNING,
+                            "Could not parse date: " + s, pe);
                 }
                 entry.setDate(date);
             } else if (s.startsWith(MercurialRepository.FILES) && entry != null) {
@@ -165,7 +171,7 @@ class MercurialHistoryParser implements Executor.StreamHandler {
                 && entry != null) {
                     entry = null;
             } else if (s.length() > 0) {
-                OpenGrokLogger.getLogger().log(Level.WARNING,
+                LOGGER.log(Level.WARNING,
                     "Invalid/unexpected output {0} from hg log for repo {1}",
                     new Object[]{s, repository.getDirectoryName()});
             }

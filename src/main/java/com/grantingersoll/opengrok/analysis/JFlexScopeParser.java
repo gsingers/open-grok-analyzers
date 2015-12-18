@@ -58,7 +58,7 @@ public abstract class JFlexScopeParser {
         return scopes;
     }
     
-    public void parse(Tag tag, Reader reader) throws IOException {
+    public void parse(Definitions.Tag tag, Reader reader) throws IOException {
         try {
             int lineNo = 0;
             while (lineNo < tag.line) {

@@ -26,6 +26,12 @@ package com.grantingersoll.opengrok.analysis.javascript;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.configuration.Project;
+import com.grantingersoll.opengrok.history.Annotation;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
@@ -45,7 +51,7 @@ public class JavaScriptAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public JavaScriptAnalyzerFactory() {
-        super(null, null, SUFFIXES, MAGICS, null, "text/plain", Genre.PLAIN, name);
+        super(null, null, SUFFIXES, MAGICS, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
     }
 
     @Override

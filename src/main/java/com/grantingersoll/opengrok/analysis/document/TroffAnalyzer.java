@@ -26,11 +26,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.StreamSource;
+import org.apache.lucene.analysis.Analyzer.TokenStreamComponents;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.TextField;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.analysis.TextAnalyzer;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;

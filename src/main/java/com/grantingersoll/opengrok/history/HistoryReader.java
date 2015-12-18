@@ -23,13 +23,13 @@
  */
 package com.grantingersoll.opengrok.history;
 
-import com.grantingersoll.opengrok.util.IOUtils;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 
+import com.grantingersoll.opengrok.util.IOUtils;
+import com.grantingersoll.opengrok.util.IOUtils;
 
 /**
  * Class for reading history entries in a way suitable for indexing by Lucene.

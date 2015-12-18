@@ -1,6 +1,3 @@
-package com.grantingersoll.opengrok.index;
-
-
 /*
  * CDDL HEADER START
  *
@@ -24,8 +21,7 @@ package com.grantingersoll.opengrok.index;
  * Copyright (c) 2010, 2014, Oracle and/or its affiliates. All rights reserved.
  */
 
-import java.util.Set;
-
+package com.grantingersoll.opengrok.index;
 
 import java.io.File;
 import java.io.Serializable;
@@ -143,8 +139,8 @@ public class Filter implements Serializable {
         }
 
         //Check File extension
-        if (!ret) {
-            int start = fileName.indexOf(".");
+        if (!ret) {      
+            int start = fileName.indexOf(".");          
             if(start != -1){
                 String fileExtension = fileName.substring(start,fileName.length());
                  if (filename.contains(fileExtension)) {
@@ -152,7 +148,7 @@ public class Filter implements Serializable {
                 }
             }
         }
-
+        
         return ret;
     }
 

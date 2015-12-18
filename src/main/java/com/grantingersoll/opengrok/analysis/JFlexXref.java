@@ -35,7 +35,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
-
+import com.grantingersoll.opengrok.analysis.Definitions.Tag;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
 import com.grantingersoll.opengrok.history.Annotation;

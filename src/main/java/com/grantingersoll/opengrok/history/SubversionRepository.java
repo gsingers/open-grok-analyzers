@@ -20,7 +20,6 @@
 /*
  * Copyright (c) 2007, 2015, Oracle and/or its affiliates. All rights reserved.
  */
-
 package com.grantingersoll.opengrok.history;
 
 import java.io.BufferedInputStream;
@@ -32,6 +31,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +39,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -56,15 +56,22 @@ import org.xml.sax.ext.DefaultHandler2;
  * @author Trond Norbye
  */
 public class SubversionRepository extends Repository {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SubversionRepository.class);
+
     private static final long serialVersionUID = 1L;
-    
+
     private static final String ENV_SVN_USERNAME = "OPENGROK_SUBVERSION_USERNAME";
     private static final String ENV_SVN_PASSWORD = "OPENGROK_SUBVERSION_PASSWORD";
-    
-    /** The property name used to obtain the client command for this repository. */
-    public static final String CMD_PROPERTY_KEY =
-        "com.grantingersoll.opengrok.history.Subversion";
-    /** The command to use to access the repository if none was given explicitly */
+
+    /**
+     * The property name used to obtain the client command for this repository.
+     */
+    public static final String CMD_PROPERTY_KEY
+            = "com.grantingersoll.opengrok.history.Subversion";
+    /**
+     * The command to use to access the repository if none was given explicitly
+     */
     public static final String CMD_FALLBACK = "svn";
 
     protected String reposPath;
@@ -78,7 +85,7 @@ public class SubversionRepository extends Repository {
         if (node == null) {
             return null;
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         Node n = node.getFirstChild();
         while (n != null) {
             if (n.getNodeType() == Node.TEXT_NODE) {
@@ -98,8 +105,8 @@ public class SubversionRepository extends Repository {
             // set to true if we manage to find the root directory
             Boolean rootFound = Boolean.FALSE;
 
-            List<String> cmd = new ArrayList<String>();
-            cmd.add(this.cmd);
+            List<String> cmd = new ArrayList<>();
+            cmd.add(RepoCommand);
             cmd.add("info");
             cmd.add("--xml");
             File directory = new File(getDirectoryName());
@@ -111,39 +118,38 @@ public class SubversionRepository extends Repository {
                     DocumentBuilder builder = factory.newDocumentBuilder();
                     Document document = builder.parse(executor.getOutputStream());
 
-                    String url =
-                        getValue(document.getElementsByTagName("url").item(0));
+                    String url
+                            = getValue(document.getElementsByTagName("url").item(0));
                     if (url == null) {
-                        OpenGrokLogger.getLogger()
-                            .warning("svn info did not contain an URL for ["
-                                + directoryName
-                                + "]. Assuming remote repository.");
+                        LOGGER.log(Level.WARNING,
+                                        "svn info did not contain an URL for [{0}]. Assuming remote repository.",
+                                        directoryName);
                         setRemote(true);
                     } else {
                         if (!url.startsWith("file")) {
                             setRemote(true);
                         }
                     }
-                    String root =
-                        getValue(document.getElementsByTagName("root").item(0));
+                    String root
+                            = getValue(document.getElementsByTagName("root").item(0));
                     if (url != null && root != null) {
                         reposPath = url.substring(root.length());
                         rootFound = Boolean.TRUE;
                     }
                 } catch (SAXException saxe) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Parser error parsing svn output", saxe);
+                    LOGGER.log(Level.WARNING,
+                            "Parser error parsing svn output", saxe);
                 } catch (ParserConfigurationException pce) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "Parser configuration error parsing svn output", pce);
+                    LOGGER.log(Level.WARNING,
+                            "Parser configuration error parsing svn output", pce);
                 } catch (IOException ioe) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING,
-                        "IOException reading from svn process", ioe);
+                    LOGGER.log(Level.WARNING,
+                            "IOException reading from svn process", ioe);
                 }
             } else {
-                OpenGrokLogger.getLogger()
-                        .warning("Failed to execute svn info for ["
-                            + directoryName + "]. Repository disabled.");
+                LOGGER.log(Level.WARNING,
+                                "Failed to execute svn info for [{0}]. Repository disabled.",
+                                directoryName);
             }
 
             setWorking(rootFound);
@@ -151,8 +157,8 @@ public class SubversionRepository extends Repository {
     }
 
     /**
-     * Get an executor to be used for retrieving the history log for the
-     * named file.
+     * Get an executor to be used for retrieving the history log for the named
+     * file.
      *
      * @param file The file to retrieve history for
      * @param sinceRevision the revision number immediately preceding the first
@@ -164,18 +170,18 @@ public class SubversionRepository extends Repository {
         try {
             abs = file.getCanonicalPath();
         } catch (IOException exp) {
-            OpenGrokLogger.getLogger().log(Level.SEVERE,
-                "Failed to get canonical path: {0}", exp.getClass().toString());
+            LOGGER.log(Level.SEVERE,
+                    "Failed to get canonical path: {0}", exp.getClass().toString());
             return null;
-        } 
+        }
         String filename = "";
         if (abs.length() > directoryName.length()) {
             filename = abs.substring(directoryName.length() + 1);
         }
 
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        cmd.add(this.cmd);
+        cmd.add(RepoCommand);
         cmd.add("log");
         cmd.add("--non-interactive");
         cmd.addAll(getAuthCommandLineParams());
@@ -197,25 +203,24 @@ public class SubversionRepository extends Repository {
     }
 
     @Override
-    public InputStream getHistoryGet(String parent, String basename, String rev)
-    {
+    public InputStream getHistoryGet(String parent, String basename, String rev) {
         InputStream ret = null;
 
         File directory = new File(directoryName);
-        
+
         String filepath;
         try {
             filepath = (new File(parent, basename)).getCanonicalPath();
         } catch (IOException exp) {
-            OpenGrokLogger.getLogger().log(Level.SEVERE,
-                "Failed to get canonical path: {0}", exp.getClass().toString());
+            LOGGER.log(Level.SEVERE,
+                    "Failed to get canonical path: {0}", exp.getClass().toString());
             return null;
         }
         String filename = filepath.substring(directoryName.length() + 1);
 
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        cmd.add(this.cmd);
+        cmd.add(RepoCommand);
         cmd.add("cat");
         cmd.add("-r");
         cmd.add(rev);
@@ -266,23 +271,32 @@ public class SubversionRepository extends Repository {
 
         @Override
         public void startElement(String uri, String localName, String qname,
-            Attributes attr)
-        {
+                Attributes attr) {
             sb.setLength(0);
-            if ("entry".equals(qname)) {
-                rev = null;
-                author = null;
-            } else if ("commit".equals(qname)) {
-                rev = attr.getValue("revision");
+            if (null != qname) {
+                switch (qname) {
+                    case "entry":
+                        rev = null;
+                        author = null;
+                        break;
+                    case "commit":
+                        rev = attr.getValue("revision");
+                        break;
+                }
             }
         }
 
         @Override
         public void endElement(String uri, String localName, String qname) {
-            if ("author".equals(qname)) {
-                author = sb.toString();
-            } else if ("entry".equals(qname)) {
-                annotation.addLine(rev, author, true);
+            if (null != qname) {
+                switch (qname) {
+                    case "author":
+                        author = sb.toString();
+                        break;
+                    case "entry":
+                        annotation.addLine(rev, author, true);
+                        break;
+                }
             }
         }
 
@@ -298,14 +312,14 @@ public class SubversionRepository extends Repository {
         SAXParser saxParser = null;
         try {
             saxParser = factory.newSAXParser();
-        } catch (Exception ex) {
+        } catch (ParserConfigurationException | SAXException ex) {
             IOException err = new IOException("Failed to create SAX parser", ex);
             throw err;
         }
 
-        ArrayList<String> argv = new ArrayList<String>();
+        ArrayList<String> argv = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        argv.add(cmd);
+        argv.add(RepoCommand);
         argv.add("annotate");
         argv.addAll(getAuthCommandLineParams());
         argv.add("--non-interactive");
@@ -322,13 +336,13 @@ public class SubversionRepository extends Repository {
         try {
             process = pb.start();
             AnnotateHandler handler = new AnnotateHandler(file.getName());
-            try (BufferedInputStream in =
-                    new BufferedInputStream(process.getInputStream())) {
+            try (BufferedInputStream in
+                    = new BufferedInputStream(process.getInputStream())) {
                 saxParser.parse(in, handler);
                 ret = handler.annotation;
             } catch (Exception e) {
-                OpenGrokLogger.getLogger().log(Level.SEVERE,
-                    "An error occurred while parsing the xml output", e);
+                LOGGER.log(Level.SEVERE,
+                        "An error occurred while parsing the xml output", e);
             }
         } finally {
             if (process != null) {
@@ -360,9 +374,9 @@ public class SubversionRepository extends Repository {
     public void update() throws IOException {
         File directory = new File(getDirectoryName());
 
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        cmd.add(this.cmd);
+        cmd.add(RepoCommand);
         cmd.add("update");
         cmd.addAll(getAuthCommandLineParams());
         cmd.add("--non-interactive");
@@ -374,20 +388,20 @@ public class SubversionRepository extends Repository {
 
     @Override
     boolean isRepositoryFor(File file) {
-       if (file.isDirectory()) {
-        File f = new File(file, ".svn");
-        return f.exists() && f.isDirectory();
-       }
-       return false;
+        if (file.isDirectory()) {
+            File f = new File(file, ".svn");
+            return f.exists() && f.isDirectory();
+        }
+        return false;
     }
 
     @Override
     public boolean isWorking() {
         if (working == null) {
             ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-            working = checkCmd(cmd, "--help");
+            working = checkCmd(RepoCommand, "--help");
         }
-        return working.booleanValue();
+        return working;
     }
 
     private List<String> getAuthCommandLineParams() {
@@ -410,14 +424,13 @@ public class SubversionRepository extends Repository {
         String parent = null;
         File directory = new File(directoryName);
 
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         ensureCommand(CMD_PROPERTY_KEY, CMD_FALLBACK);
-        cmd.add(this.cmd);
+        cmd.add(RepoCommand);
         cmd.add("info");
         ProcessBuilder pb = new ProcessBuilder(cmd);
         pb.directory(directory);
-        Process process = null;
-
+        Process process;
         process = pb.start();
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
@@ -426,8 +439,8 @@ public class SubversionRepository extends Repository {
                 if (line.startsWith("URL:")) {
                     String parts[] = line.split("\\s+");
                     if (parts.length != 2) {
-                        OpenGrokLogger.getLogger().log(Level.WARNING,
-                            "Failed to get parent for {0}", directoryName);
+                        LOGGER.log(Level.WARNING,
+                                "Failed to get parent for {0}", directoryName);
                     }
                     parent = parts[1];
                     break;

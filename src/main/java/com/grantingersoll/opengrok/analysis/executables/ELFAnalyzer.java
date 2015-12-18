@@ -32,14 +32,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.StreamSource;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
-import com.grantingersoll.opengrok.OpenGrokLogger;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.StreamSource;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.web.Util;
 
 /**
@@ -50,6 +54,8 @@ import com.grantingersoll.opengrok.web.Util;
  * @author Trond Norbye
  */
 public class ELFAnalyzer extends FileAnalyzer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ELFAnalyzer.class);
 
     private static final List<String> READABLE_SECTIONS;
     static {
@@ -93,7 +99,7 @@ public class ELFAnalyzer extends FileAnalyzer {
         ELFHeader eh = new ELFHeader(fmap);
 
         if (eh.e_shnum <= 0) {
-            OpenGrokLogger.getLogger().log(Level.FINE, "Skipping file, no section headers");
+            LOGGER.log(Level.FINE, "Skipping file, no section headers");
             return null;
         }
 
@@ -101,7 +107,7 @@ public class ELFAnalyzer extends FileAnalyzer {
         ELFSection stringSection = new ELFSection(fmap);
 
         if (stringSection.sh_size == 0) {
-            OpenGrokLogger.getLogger().log(Level.FINE, "Skipping file, no section name string table");
+            LOGGER.log(Level.FINE, "Skipping file, no section name string table");
             return null;
         }
 

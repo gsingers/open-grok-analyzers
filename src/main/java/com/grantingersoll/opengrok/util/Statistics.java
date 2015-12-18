@@ -23,35 +23,33 @@
 
 package com.grantingersoll.opengrok.util;
 
-import org.slf4j.Logger;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static com.grantingersoll.opengrok.util.StringUtils.getReadableTime;
 
-;
-
 public class Statistics {
-
-  private final long startTime;
+        
+  private final long startTime;  
 
   public Statistics() {
-    startTime = System.currentTimeMillis();
+      startTime = System.currentTimeMillis();    
   }
 
   public void report(Logger log, String msg) {
-    long stopTime = System.currentTimeMillis();
-    String time_str = StringUtils.getReadableTime(stopTime - startTime);
-    log.info(msg + " (took {0})", time_str);
+      long stopTime = System.currentTimeMillis();
+      String time_str = StringUtils.getReadableTime(stopTime - startTime);
+      log.log(Level.INFO, msg + " (took {0})", time_str);
   }
 
   public void report(Logger log) {
     long stopTime = System.currentTimeMillis() - startTime;
-    log.info("Total time: {0}", getReadableTime(stopTime));
+    log.log(Level.INFO, "Total time: {0}", getReadableTime(stopTime));
 
-    System.gc();//TODO: seriously?
+    System.gc();
     Runtime r = Runtime.getRuntime();
     long mb = 1024L * 1024;
-    log.info("Final Memory: {0}M/{1}M",
-            new Object[]{(r.totalMemory() - r.freeMemory()) /
-                    mb, r.totalMemory() / mb});
-  }
+    log.log(Level.INFO, "Final Memory: {0}M/{1}M", 
+            new Object[]{(r.totalMemory() - r.freeMemory()) / 
+                    mb, r.totalMemory() / mb});    
+  }    
 }

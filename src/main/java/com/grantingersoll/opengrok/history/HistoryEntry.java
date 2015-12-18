@@ -25,16 +25,14 @@
  */
 package com.grantingersoll.opengrok.history;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 
 /**
  * Collect all information of a given revision
@@ -42,7 +40,9 @@ import java.util.logging.Level;
  * @author Trond Norbye
  */
 public class HistoryEntry {
-  private transient static Logger log = LoggerFactory.getLogger(HistoryEntry.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HistoryEntry.class);
+
     private String revision;
     private Date date;
     private String author;
@@ -92,28 +92,28 @@ public class HistoryEntry {
 
     public void dump() {
 
-        log.debug("HistoryEntry : revision       = {0}", revision);
-        log.debug("HistoryEntry : tags           = {0}", tags);
-        log.debug("HistoryEntry : date           = {0}", date);
-        log.debug("HistoryEntry : author         = {0}", author);
-        log.debug("HistoryEntry : active         = {0}", (active ?
+        LOGGER.log(Level.FINE, "HistoryEntry : revision       = {0}", revision);
+        LOGGER.log(Level.FINE, "HistoryEntry : tags           = {0}", tags);
+        LOGGER.log(Level.FINE, "HistoryEntry : date           = {0}", date);
+        LOGGER.log(Level.FINE, "HistoryEntry : author         = {0}", author);
+        LOGGER.log(Level.FINE, "HistoryEntry : active         = {0}", (active ?
                 "True" : "False"));
         String[] lines = message.toString().split("\n");
         String separator = "=";
         for (String line : lines) {
-            log.debug("HistoryEntry : message        {0} {1}",
+            LOGGER.log(Level.FINE, "HistoryEntry : message        {0} {1}",
                     new Object[]{separator, line});
             separator = ">";
         }
         separator = "=";
         for (String cr : changeRequests) {
-            log.debug("HistoryEntry : changeRequests {0} {1}",
+            LOGGER.log(Level.FINE, "HistoryEntry : changeRequests {0} {1}",
                     new Object[]{separator, cr});
             separator = ">";
         }
         separator = "=";
         for (String file : files) {
-            log.debug("HistoryEntry : files          {0} {1}",
+            LOGGER.log(Level.FINE, "HistoryEntry : files          {0} {1}",
                     new Object[]{separator, file});
             separator = ">";
         }

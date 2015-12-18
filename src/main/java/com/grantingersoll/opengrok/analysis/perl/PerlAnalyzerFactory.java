@@ -28,7 +28,9 @@ import java.io.Reader;
 import java.io.Writer;
 
 import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;
@@ -45,7 +47,8 @@ public class PerlAnalyzerFactory extends FileAnalyzerFactory {
     private static final String[] SUFFIXES = {
         "PL",
         "PERL",
-        "PM"
+        "PM",
+        "PH"
     };
     private static final String[] MAGICS = {
         "#!/usr/bin/env perl",
@@ -55,7 +58,7 @@ public class PerlAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public PerlAnalyzerFactory() {
-        super(null, null, SUFFIXES, MAGICS, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
+        super(null, null, SUFFIXES, MAGICS, null, "text/plain", Genre.PLAIN, name);
     }
 
     @Override

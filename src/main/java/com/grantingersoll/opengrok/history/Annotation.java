@@ -37,6 +37,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import java.util.logging.Logger;
+
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.web.Util;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.web.Util;
 
 /**
@@ -45,12 +49,14 @@ import com.grantingersoll.opengrok.web.Util;
  */
 public class Annotation {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Annotation.class);
+
     private final List<Line> lines = new ArrayList<Line>();
     private final Map<String, String> desc = new HashMap<String, String>();
+    private final Map<String, Integer> fileVersions = new HashMap<String, Integer>(); //maps revision to file version
     private int widestRevision;
     private int widestAuthor;
     private final String filename;
-    static final Logger log = Logger.getLogger(Annotation.class.getName());
 
     public Annotation(String filename) {
         this.filename = filename;
@@ -163,6 +169,30 @@ public class Annotation {
         return desc.get(revision);
     }
 
+    void addFileVersion(String revision, int fileVersion) {
+        fileVersions.put(revision, fileVersion);
+    }
+
+    /**
+     * Translates repository revision number into file version.
+     * @param revision revision number
+     * @return file version number. 0 if unknown. 1 first version of file, etc.
+     */
+    public int getFileVersion(String revision) {
+        if( fileVersions.containsKey(revision) ) {
+            return fileVersions.get(revision);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @return Count of revisions on this file.
+     */
+    public int getFileVersionsCount() {
+        return fileVersions.size();
+    }
+
     /** Class representing one line in the file. */
     private static class Line {
         final String revision;
@@ -206,7 +236,7 @@ public class Annotation {
         try {
             writeTooltipMap(sw);
         } catch (IOException e) {
-            log.finest(e.getMessage());
+            LOGGER.finest(e.getMessage());
         }
 
         return sw.toString();

@@ -27,14 +27,13 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import com.grantingersoll.opengrok.analysis.StreamSource;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 import com.grantingersoll.opengrok.analysis.AnalyzerGuru;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.web.Util;
 
 /**

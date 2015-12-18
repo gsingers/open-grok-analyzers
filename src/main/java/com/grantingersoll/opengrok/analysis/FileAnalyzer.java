@@ -26,14 +26,16 @@ package com.grantingersoll.opengrok.analysis;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.grantingersoll.opengrok.configuration.Project;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-
 import com.grantingersoll.opengrok.analysis.plain.PlainFullTokenizer;
 import com.grantingersoll.opengrok.analysis.plain.PlainSymbolTokenizer;
 import com.grantingersoll.opengrok.configuration.Project;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 
 /**
  * Base class for all different File Analyzers
@@ -52,11 +54,12 @@ import org.slf4j.LoggerFactory;
  * @author Chandan
  */
 public class FileAnalyzer extends Analyzer {
-    private transient static Logger log = LoggerFactory.getLogger(com.grantingersoll.opengrok.analysis.FileAnalyzer.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileAnalyzer.class);
 
     protected Project project;
     protected boolean scopesEnabled;
-    private final com.grantingersoll.opengrok.analysis.FileAnalyzerFactory factory;
+    private final FileAnalyzerFactory factory;
 
     /**
      * What kind of file is this?
@@ -104,9 +107,9 @@ public class FileAnalyzer extends Analyzer {
             return null;
         }
     }
-    protected com.grantingersoll.opengrok.analysis.Ctags ctags;
+    protected Ctags ctags;
 
-    public void setCtags(com.grantingersoll.opengrok.analysis.Ctags ctags) {
+    public void setCtags(Ctags ctags) {
         this.ctags = ctags;
     }
 
@@ -122,7 +125,7 @@ public class FileAnalyzer extends Analyzer {
      * Get the factory which created this analyzer.
      * @return the {@code FileAnalyzerFactory} which created this analyzer
      */
-    public final com.grantingersoll.opengrok.analysis.FileAnalyzerFactory getFactory() {
+    public final FileAnalyzerFactory getFactory() {
         return factory;
     }
 
@@ -133,7 +136,7 @@ public class FileAnalyzer extends Analyzer {
     /** Creates a new instance of FileAnalyzer
      * @param factory name of factory to be used 
      */
-    public FileAnalyzer(com.grantingersoll.opengrok.analysis.FileAnalyzerFactory factory) {
+    public FileAnalyzer(FileAnalyzerFactory factory) {
         super(Analyzer.PER_FIELD_REUSE_STRATEGY);
         this.factory = factory;        
                         
@@ -176,15 +179,15 @@ public class FileAnalyzer extends Analyzer {
                 return new TokenStreamComponents(new PlainFullTokenizer());
             case "path":
             case "project":
-                return new TokenStreamComponents(new com.grantingersoll.opengrok.analysis.PathTokenizer());
+                return new TokenStreamComponents(new PathTokenizer());
             case "hist":
-                return new com.grantingersoll.opengrok.analysis.HistoryAnalyzer().createComponents(fieldName);
+                return new HistoryAnalyzer().createComponents(fieldName);
             case "refs":
             case "defs":
                 return new TokenStreamComponents(new PlainSymbolTokenizer());
             default:
-                log.warn(
-                        "Have no analyzer for: {0}", fieldName);
+                LOGGER.log(
+                        Level.WARNING, "Have no analyzer for: {0}", fieldName);
                 return null;
         }
     }

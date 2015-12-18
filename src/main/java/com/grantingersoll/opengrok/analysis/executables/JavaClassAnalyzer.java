@@ -32,8 +32,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.IteratorReader;
 import com.grantingersoll.opengrok.analysis.StreamSource;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.ClassFormatException;
 import org.apache.bcel.classfile.ClassParser;
@@ -59,7 +61,10 @@ import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.IteratorReader;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 
 /**
  * Analyzes Java Class files Created on September 23, 2005
@@ -68,6 +73,8 @@ import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
  * @author Lubos Kosco , January 2010 , updated bcel, comment on thread safety
  */
 public class JavaClassAnalyzer extends FileAnalyzer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JavaClassAnalyzer.class);
 
     private final String urlPrefix = RuntimeEnvironment.getInstance().getUrlPrefix();
 
@@ -104,7 +111,7 @@ public class JavaClassAnalyzer extends FileAnalyzer {
             try { 
                 xrefOut.flush();
             } catch (IOException ex) {
-                Logger.getLogger(JavaClassAnalyzer.class.getName()).log(Level.WARNING, "Couldn't flush xref, will retry once added to doc", ex);
+                LOGGER.log(Level.WARNING, "Couldn't flush xref, will retry once added to doc", ex);
             }
         }        
         xref = null; //flush the xref        

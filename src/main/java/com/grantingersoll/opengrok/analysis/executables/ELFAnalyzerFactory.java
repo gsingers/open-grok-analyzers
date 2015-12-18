@@ -24,6 +24,8 @@
 package com.grantingersoll.opengrok.analysis.executables;
 
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 
 public class ELFAnalyzerFactory extends FileAnalyzerFactory {

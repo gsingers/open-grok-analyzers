@@ -1,20 +1,38 @@
+/*
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License (the "License").
+ * You may not use this file except in compliance with the License.
+ *
+ * See LICENSE.txt included in this distribution for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at LICENSE.txt.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ */
+
+/*
+ * Copyright (c) 2008, 2015, Oracle and/or its affiliates. All rights reserved.
+ */
 package com.grantingersoll.opengrok.history;
 
-
-/**
- *
- *
- **/
 import java.io.Serializable;
 
 /**
- * Class to contain the common info for a repository. This object
- * will live on the server and the client side, so don't add logic
- * that will only work on one side in this object.
+ * Class to contain the common info for a repository. This object will live on
+ * the server and the client side, so don't add logic that will only work on one
+ * side in this object.
  *
  * @author Trond Norbye
  */
 public class RepositoryInfo implements Serializable {
+
     private static final long serialVersionUID = 2L;
 
     protected String directoryName; // absolute path
@@ -35,7 +53,7 @@ public class RepositoryInfo implements Serializable {
     public RepositoryInfo(RepositoryInfo orig) {
         this.directoryName = orig.directoryName;
         this.type = orig.type;
-        this.working = Boolean.valueOf(orig.isWorking());
+        this.working = orig.isWorking();
         this.remote = orig.isRemote();
         this.datePattern = orig.datePattern;
         this.parent = orig.parent;
@@ -44,6 +62,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * Get the name of the root directory for this repository.
+     *
      * @return the name of the root directory
      */
     public String getDirectoryName() {
@@ -52,6 +71,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * Specify the name of the root directory for this repository.
+     *
      * @param directoryName the new name of the root directory
      */
     public void setDirectoryName(String directoryName) {
@@ -65,7 +85,7 @@ public class RepositoryInfo implements Serializable {
      * @return true if the HistoryGuru may use the repository
      */
     public boolean isWorking() {
-        return working != null && working.booleanValue();
+        return working != null && working;
     }
 
     /**
@@ -78,8 +98,8 @@ public class RepositoryInfo implements Serializable {
     }
 
     /**
-     * Is the history and version information for this repository stored on
-     * a remote server?
+     * Is the history and version information for this repository stored on a
+     * remote server?
      *
      * @return true if the history is stored on a remote server.
      */
@@ -89,6 +109,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * Set the property remote
+     *
      * @param remote
      */
     public void setRemote(boolean remote) {
@@ -97,6 +118,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * get property type
+     *
      * @return type
      */
     public String getType() {
@@ -105,6 +127,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * Set property type
+     *
      * @param type
      */
     public void setType(String type) {
@@ -113,6 +136,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * get property type
+     *
      * @return parent
      */
     public String getParent() {
@@ -121,6 +145,7 @@ public class RepositoryInfo implements Serializable {
 
     /**
      * Set property parent
+     *
      * @param parent
      */
     public void setParent(String parent) {
@@ -143,4 +168,3 @@ public class RepositoryInfo implements Serializable {
         this.branch = branch;
     }
 }
-

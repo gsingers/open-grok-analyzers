@@ -127,7 +127,7 @@ public class Project {
         if (File.separatorChar != '/') {
             lpath = path.replace(File.separatorChar, '/');
         }
-        com.grantingersoll.opengrok.configuration.RuntimeEnvironment env = com.grantingersoll.opengrok.configuration.RuntimeEnvironment.getInstance();
+        RuntimeEnvironment env = RuntimeEnvironment.getInstance();
         if (env.hasProjects()) {
             for (Project proj : env.getProjects()) {
                 if (lpath.indexOf(proj.getPath()) == 0) {
@@ -147,7 +147,7 @@ public class Project {
     public static Project getProject(File file) {
         Project ret = null;
         try {
-            ret = getProject(com.grantingersoll.opengrok.configuration.RuntimeEnvironment.getInstance().getPathRelativeToSourceRoot(file, 0));
+            ret = getProject(RuntimeEnvironment.getInstance().getPathRelativeToSourceRoot(file, 0));
         } catch (FileNotFoundException e) { // NOPMD
             // ignore if not under source root
         } catch (IOException e) { // NOPMD
@@ -163,7 +163,7 @@ public class Project {
      */
     public static Project getByDescription(String desc) {
         Project ret = null;
-        com.grantingersoll.opengrok.configuration.RuntimeEnvironment env = com.grantingersoll.opengrok.configuration.RuntimeEnvironment.getInstance();
+        RuntimeEnvironment env = RuntimeEnvironment.getInstance();
         if (env.hasProjects()) {
             for (Project proj : env.getProjects()) {
                 if (desc.indexOf(proj.getDescription()) == 0) {

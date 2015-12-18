@@ -26,7 +26,9 @@ package com.grantingersoll.opengrok.analysis.archive;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.grantingersoll.opengrok.analysis.executables.JarAnalyzerFactory;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.analysis.executables.JarAnalyzerFactory;
 
@@ -102,7 +104,7 @@ public final class ZipAnalyzerFactory extends FileAnalyzerFactory {
             new ZipAnalyzerFactory();
 
     private ZipAnalyzerFactory() {
-        super(null, null, SUFFIXES, null, MATCHER, null, FileAnalyzer.Genre.XREFABLE, name);
+        super(null, null, SUFFIXES, null, MATCHER, null, Genre.XREFABLE, name);
     }
 
     @Override

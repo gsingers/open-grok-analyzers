@@ -30,13 +30,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import java.util.logging.Logger;
+
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.Executor;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 
 /**
  * Parse a stream of ClearCase log comments.
  */
 class ClearCaseHistoryParser implements Executor.StreamHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClearCaseHistoryParser.class);
 
     private History history;
     private ClearCaseRepository repository=new ClearCaseRepository();
@@ -90,7 +96,7 @@ class ClearCaseHistoryParser implements Executor.StreamHandler {
                 try {
                     entry.setDate(df.parse(s));
                 } catch (ParseException pe) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING, "Could not parse date: " + s, pe);
+                    LOGGER.log(Level.WARNING, "Could not parse date: " + s, pe);
                 }
             }
             if ((s = in.readLine()) != null) {

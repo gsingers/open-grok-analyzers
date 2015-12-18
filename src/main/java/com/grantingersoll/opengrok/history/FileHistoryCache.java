@@ -48,21 +48,24 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.IOUtils;
 
 /*
  * Class representing file based storage of per source file history.
  */
 class FileHistoryCache implements HistoryCache {
-    private transient static Logger log = LoggerFactory.getLogger(FileHistoryCache.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileHistoryCache.class);
+
     private final Object lock = new Object();
     private String historyCacheDirName = "historycache";
     private String latestRevFileName = "OpenGroklatestRev";
@@ -289,7 +292,7 @@ class FileHistoryCache implements HistoryCache {
         synchronized (lock) {
             if (!cache.delete() && cache.exists()) {
                 if (!output.delete()) {
-                    log.warn(
+                    LOGGER.log(Level.WARNING,
                         "Failed to remove temporary history cache file");
                 }
                 throw new HistoryException(
@@ -297,7 +300,7 @@ class FileHistoryCache implements HistoryCache {
             }
             if (!output.renameTo(cache)) {
                 if (!output.delete()) {
-                    log.warn(
+                    LOGGER.log(Level.WARNING,
                         "Failed to remove temporary history cache file");
                 }
                 throw new HistoryException("Failed to rename cache tmpfile.");
@@ -307,7 +310,7 @@ class FileHistoryCache implements HistoryCache {
 
     private void finishStore(Repository repository, String latestRev) {
         storeLatestCachedRevision(repository, latestRev);
-        log.debug(
+        LOGGER.log(Level.FINE,
             "Done storing history for repo {0}",
             new Object[] {repository.getDirectoryName()});
     }
@@ -335,7 +338,7 @@ class FileHistoryCache implements HistoryCache {
             return;
         }
 
-        log.debug(
+        LOGGER.log(Level.FINE,
             "Storing history for repo {0}",
             new Object[] {repository.getDirectoryName()});
 
@@ -395,7 +398,7 @@ class FileHistoryCache implements HistoryCache {
                         continue;
                 }
             } catch (IOException ex) {
-               log.warn(
+               LOGGER.log(Level.WARNING,
                    "isRenamedFile() got exception: " + ex);
             }
 
@@ -418,7 +421,7 @@ class FileHistoryCache implements HistoryCache {
                     renamed_map.put(map_entry.getKey(), map_entry.getValue());
                 }
             } catch (IOException ex) {
-                log.warn(
+                LOGGER.log(Level.WARNING,
                     "isRenamedFile() got exception: " + ex);
             }
         }
@@ -431,7 +434,7 @@ class FileHistoryCache implements HistoryCache {
             File dir = cache.getParentFile();
 
             if (!dir.isDirectory() && !dir.mkdirs()) {
-                log.warn(
+                LOGGER.log(Level.WARNING,
                    "Unable to create cache directory '" + dir + "'.");
             }
         }
@@ -447,7 +450,7 @@ class FileHistoryCache implements HistoryCache {
                             root, true);
                     } catch (Exception ex) {
                         // We want to catch any exception since we are in thread.
-                        log.warn(
+                        LOGGER.log(Level.WARNING,
                             "doFileHistory() got exception: " + ex);
                     } finally {
                         latch.countDown();
@@ -461,7 +464,7 @@ class FileHistoryCache implements HistoryCache {
             // Wait for the executors to finish.
             latch.await();
         } catch (InterruptedException ex) {
-            log.error("latch exception" + ex);
+            LOGGER.log(Level.SEVERE, "latch exception" + ex);
         }
         finishStore(repository, latestRev);
     }
@@ -474,7 +477,7 @@ class FileHistoryCache implements HistoryCache {
             try {
                 return readCache(cache);
             } catch (Exception e) {
-                log.warn(
+                LOGGER.log(Level.WARNING,
                         "Error when reading cache file '" + cache, e);
             }
         }
@@ -567,7 +570,7 @@ class FileHistoryCache implements HistoryCache {
             repoDirBasename = env.getPathRelativeToSourceRoot(
                     new File(repository.getDirectoryName()), 0);
         } catch (IOException ex) {
-            log.warn("Could not resolve " +
+            LOGGER.log(Level.WARNING, "Could not resolve " +
                 repository.getDirectoryName()+" relative to source root", ex);
             return null;
         }
@@ -595,7 +598,7 @@ class FileHistoryCache implements HistoryCache {
                   new FileOutputStream(getRepositoryCachedRevPath(repository))));
             writer.write(rev);
         } catch (IOException ex) {
-            log.warn( "cannot write latest cached revision to file: " +
+            LOGGER.log(Level.WARNING, "cannot write latest cached revision to file: " +
                 ex.getCause());
         } finally {
            try {
@@ -603,7 +606,7 @@ class FileHistoryCache implements HistoryCache {
                    writer.close();
                }
            } catch (IOException ex) {
-               log.info("cannot close file: " + ex);
+               LOGGER.log(Level.INFO, "cannot close file: " + ex);
            }
         }
     }
@@ -618,17 +621,17 @@ class FileHistoryCache implements HistoryCache {
             try {
                 rev = input.readLine();
             } catch (java.io.IOException e) {
-                log.warn( "failed to load: {0}", e);
+                LOGGER.log(Level.WARNING, "failed to load: {0}", e);
                 return null;
             } finally {
                 try {
                     input.close();
                 } catch (java.io.IOException e) {
-                    log.info( "failed to close: {0}", e);
+                    LOGGER.log(Level.INFO, "failed to close: {0}", e);
                 }
             }
         } catch (java.io.FileNotFoundException e) {
-            log.debug("not loading latest cached revision file from "
+            LOGGER.log(Level.FINE, "not loading latest cached revision file from "
                 + getRepositoryCachedRevPath(repository));
             return null;
         }
@@ -656,7 +659,7 @@ class FileHistoryCache implements HistoryCache {
         try {
             IOUtils.removeRecursive(Paths.get(getRepositoryHistDataDirname(repository)));
         } catch (IOException ex) {
-            log.error("Error removing files", ex);
+            LOGGER.log(Level.SEVERE, null, ex);
         }
     }
 

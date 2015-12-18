@@ -26,6 +26,10 @@ package com.grantingersoll.opengrok.analysis.c;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
@@ -52,7 +56,7 @@ public class CAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public CAnalyzerFactory() {
-        super(null, null, SUFFIXES, null, null, "text/plain", Genre.PLAIN, name);
+        super(null, null, SUFFIXES, null, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
     }
 
     @Override

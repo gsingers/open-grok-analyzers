@@ -1,4 +1,3 @@
-package com.grantingersoll.opengrok.index;
 /*
  * CDDL HEADER START
  *
@@ -21,7 +20,7 @@ package com.grantingersoll.opengrok.index;
 /*
  * Copyright (c) 2007, 2015, Oracle and/or its affiliates. All rights reserved.
  */
-
+package com.grantingersoll.opengrok.index;
 
 import java.io.File;
 

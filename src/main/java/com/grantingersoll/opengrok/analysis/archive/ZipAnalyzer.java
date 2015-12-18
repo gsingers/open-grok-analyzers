@@ -28,12 +28,14 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.IteratorReader;
 import com.grantingersoll.opengrok.analysis.StreamSource;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.TextField;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.IteratorReader;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.web.Util;
 
 /**

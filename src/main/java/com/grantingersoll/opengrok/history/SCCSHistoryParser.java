@@ -34,7 +34,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import java.util.logging.Logger;
+
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.IOUtils;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.IOUtils;
 
 /**
@@ -44,6 +48,9 @@ import com.grantingersoll.opengrok.util.IOUtils;
  * taking a lot of time. Time to index history has reduced 4 to 1!
  */
 class SCCSHistoryParser {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SCCSHistoryParser.class);
+
     boolean pass;
     boolean passRecord;
     boolean active;
@@ -124,7 +131,7 @@ class SCCSHistoryParser {
                 try {
                     rdate = sccsDateFormat.parse(f[2] + " " + f[3]);
                 } catch (ParseException e) {
-                    OpenGrokLogger.getLogger().log(Level.WARNING, "An error occured while parsing date", e);
+                    LOGGER.log(Level.WARNING, "An error occured while parsing date", e);
                     rdate = null;
                 }
                 author = f[4];

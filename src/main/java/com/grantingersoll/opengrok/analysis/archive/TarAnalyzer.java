@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 
-import com.grantingersoll.opengrok.analysis.StreamSource;
+import com.grantingersoll.opengrok.analysis.IteratorReader;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.TextField;
 import org.apache.tools.tar.TarEntry;
@@ -34,6 +34,7 @@ import org.apache.tools.tar.TarInputStream;
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.analysis.IteratorReader;
+import com.grantingersoll.opengrok.analysis.StreamSource;
 import com.grantingersoll.opengrok.web.Util;
 
 /**

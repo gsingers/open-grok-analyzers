@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.grantingersoll.opengrok.util.IOUtils;
 import org.apache.commons.jrcs.diff.PatchFailedException;
 import org.apache.commons.jrcs.rcs.Archive;
 import org.apache.commons.jrcs.rcs.InvalidFileFormatException;

@@ -18,7 +18,7 @@
  */
 
 /*
- * Copyright (c) 2008, 2013, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2008, 2015, Oracle and/or its affiliates. All rights reserved.
  */
 package com.grantingersoll.opengrok.analysis.csharp;
 
@@ -26,9 +26,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.Definitions;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
+import com.grantingersoll.opengrok.analysis.JFlexScopeParser;
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import com.grantingersoll.opengrok.analysis.JFlexXref;
 import com.grantingersoll.opengrok.analysis.plain.AbstractSourceCodeAnalyzer;
 import com.grantingersoll.opengrok.configuration.Project;
@@ -42,6 +44,11 @@ public class CSharpAnalyzer extends AbstractSourceCodeAnalyzer {
 
     protected CSharpAnalyzer(FileAnalyzerFactory factory) {
         super(factory);
+    }
+
+    @Override
+    protected JFlexScopeParser newScopeParser(Reader reader) {
+        return new CSharpScopeParser(reader);
     }
 
     @Override

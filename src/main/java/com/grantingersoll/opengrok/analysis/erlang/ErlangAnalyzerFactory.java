@@ -27,8 +27,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import com.grantingersoll.opengrok.analysis.FileAnalyzer;
 import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.configuration.Project;
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;
@@ -45,7 +48,7 @@ public class ErlangAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public ErlangAnalyzerFactory() {
-        super(null, null, SUFFIXES, MAGICS, null, "text/plain", FileAnalyzer.Genre.PLAIN, name);
+        super(null, null, SUFFIXES, MAGICS, null, "text/plain", Genre.PLAIN, name);
     }
 
     @Override

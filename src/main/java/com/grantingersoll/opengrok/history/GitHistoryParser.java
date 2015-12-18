@@ -32,8 +32,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import com.grantingersoll.opengrok.OpenGrokLogger;
+import java.util.logging.Logger;
+
 import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
+import com.grantingersoll.opengrok.util.Executor;
+import com.grantingersoll.opengrok.configuration.RuntimeEnvironment;
+import com.grantingersoll.opengrok.logger.LoggerFactory;
 import com.grantingersoll.opengrok.util.Executor;
 import com.grantingersoll.opengrok.util.StringUtils;
 
@@ -41,6 +46,8 @@ import com.grantingersoll.opengrok.util.StringUtils;
  * Parse a stream of Git log comments.
  */
 class GitHistoryParser implements Executor.StreamHandler {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitHistoryParser.class);
 
     private enum ParseState {
 
@@ -92,7 +99,7 @@ class GitHistoryParser implements Executor.StreamHandler {
                     try {
                         entry.setDate(df.parse(dateString));
                     } catch (ParseException pe) {
-                        OpenGrokLogger.getLogger().log(Level.WARNING, "Failed to parse author date: " + s, pe);
+                        LOGGER.log(Level.WARNING, "Failed to parse author date: " + s, pe);
                     }
                 } else if (StringUtils.isOnlyWhitespace(s)) {
                     // We are done reading the heading, start to read the message

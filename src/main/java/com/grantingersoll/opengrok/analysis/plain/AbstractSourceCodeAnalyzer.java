@@ -27,12 +27,13 @@ import java.io.Reader;
 import java.io.Writer;
 
 import com.grantingersoll.opengrok.analysis.Definitions;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import com.grantingersoll.opengrok.analysis.Definitions;
+import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import com.grantingersoll.opengrok.analysis.JFlexXref;
 import com.grantingersoll.opengrok.analysis.StreamSource;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 import com.grantingersoll.opengrok.configuration.Project;
 import com.grantingersoll.opengrok.history.Annotation;
 

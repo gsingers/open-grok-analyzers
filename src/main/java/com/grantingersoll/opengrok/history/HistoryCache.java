@@ -22,7 +22,6 @@
  */
 package com.grantingersoll.opengrok.history;
 
-
 import java.io.File;
 import java.util.Date;
 import java.util.Map;

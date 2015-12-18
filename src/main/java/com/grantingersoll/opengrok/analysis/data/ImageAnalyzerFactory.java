@@ -24,6 +24,7 @@
 package com.grantingersoll.opengrok.analysis.data;
 
 import com.grantingersoll.opengrok.analysis.FileAnalyzer;
+import com.grantingersoll.opengrok.analysis.FileAnalyzer.Genre;
 import com.grantingersoll.opengrok.analysis.FileAnalyzerFactory;
 
 /**
@@ -38,7 +39,7 @@ public class ImageAnalyzerFactory extends FileAnalyzerFactory {
     };
 
     public ImageAnalyzerFactory() {
-        super(null, null, SUFFIXES, null, null, null, FileAnalyzer.Genre.IMAGE, name);
+        super(null, null, SUFFIXES, null, null, null, Genre.IMAGE, name);
     }
 
     @Override
