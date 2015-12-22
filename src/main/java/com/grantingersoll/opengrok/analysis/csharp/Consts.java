@@ -27,7 +27,7 @@ import java.util.Set;
  * @author Christoph Hofmann
   */
 public class Consts{
-    public static final Set<String> kwd = new HashSet<String>() ;
+    public static final Set<String> kwd = new HashSet<>() ;
     static {
         // C# Keywords
         kwd.add("abstract");
@@ -147,11 +147,6 @@ public class Consts{
         kwd.add("#pragma warning restore");
         kwd.add("#pragma warning disable");
     }
-
-    public static final String[] SUFFIXES = {
-        "CS"
-    };
-
 }
 
 

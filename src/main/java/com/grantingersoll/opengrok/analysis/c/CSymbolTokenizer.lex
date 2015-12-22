@@ -27,6 +27,7 @@
 
 package com.grantingersoll.opengrok.analysis.c;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
@@ -38,6 +39,12 @@ import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 return false;
 %eofval}
 %char
+
+%{
+    public CSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
+%}
 
 Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 

@@ -23,22 +23,73 @@
  */
 package com.grantingersoll.opengrok.analysis.cxx;
 
-import com.grantingersoll.opengrok.analysis.c.Consts;
-
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Holds static hash set containing the C keywords
+ * Holds static hash set containing the C and C++ keywords
  */
 public class Consts {
 
-    public static final Set<String> kwd = new HashSet<String>();
+    public static final Set<String> kwd = new HashSet<>();
 
 
     static {
-        // Add all of the C keywords
-        kwd.addAll(com.grantingersoll.opengrok.analysis.c.Consts.kwd);
+        // CPP
+        kwd.add("ident");
+        kwd.add("ifndef");
+        kwd.add("defined");
+        kwd.add("endif");
+        kwd.add("include");
+        kwd.add("define");
+        kwd.add("ifdef");
+        kwd.add("pragma");
+
+        // C keywords
+        kwd.add("asm");
+        kwd.add("auto");
+        kwd.add("break");
+        kwd.add("case");
+        kwd.add("char");
+        kwd.add("const");
+        kwd.add("continue");
+        kwd.add("default");
+        kwd.add("do");
+        kwd.add("double");
+        kwd.add("else");
+        kwd.add("enum");
+        kwd.add("extern");
+        kwd.add("float");
+        kwd.add("for");
+        kwd.add("goto");
+        kwd.add("if");
+        kwd.add("inline");
+        kwd.add("int");
+        kwd.add("long");
+        kwd.add("register");
+        kwd.add("restrict");
+        kwd.add("return");
+        kwd.add("short");
+        kwd.add("signed");
+        kwd.add("sizeof");
+        kwd.add("static");
+        kwd.add("struct");
+        kwd.add("switch");
+        kwd.add("typedef");
+        kwd.add("union");
+        kwd.add("unsigned");
+        kwd.add("void");
+        kwd.add("volatile");
+        kwd.add("while");
+        kwd.add("_Bool");
+        kwd.add("_Complex");
+        kwd.add("_Imaginary");
+
+        // other keywords
+        kwd.add("bool");
+        kwd.add("true");
+        kwd.add("false");
+        kwd.add("redeclared");
 
         // C++ keywords
         kwd.add("catch");
@@ -68,15 +119,4 @@ public class Consts {
         kwd.add("virtual");
         kwd.add("wchar_t");
     }
-
-    public static final String[] SUFFIXES = {
-        "CPP",
-        "HPP",
-        "CC",
-        "C++",
-        "HH",
-        "CXX",
-        "HXX",
-        "TXX"
-    };
 }

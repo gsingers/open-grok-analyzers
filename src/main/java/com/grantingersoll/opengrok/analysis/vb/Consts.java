@@ -36,7 +36,7 @@ public final class Consts {
     private static final Set<String> reservedKeywords;
 
     static {
-        HashSet<String> kwds = new HashSet<String>();
+        HashSet<String> kwds = new HashSet<>();
         try {
 
             populateKeywordSet(kwds, "vbReservedWords.dat");

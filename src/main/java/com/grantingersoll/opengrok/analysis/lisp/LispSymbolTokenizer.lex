@@ -29,6 +29,7 @@ package com.grantingersoll.opengrok.analysis.lisp;
 import java.io.IOException;
 import java.io.Reader;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
@@ -46,6 +47,10 @@ return false;
 
 %{
     private int nestedComment;
+
+    public LispSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
 %}
 
 Identifier = [\-\+\*\!\@\$\%\&\/\?\.\,\:\{\}\=a-zA-Z0-9_\<\>]+

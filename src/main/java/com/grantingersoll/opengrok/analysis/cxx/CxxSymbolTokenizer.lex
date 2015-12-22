@@ -21,8 +21,9 @@
  * Copyright (c) 2008, 2015, Oracle and/or its affiliates. All rights reserved.
  */
 
-package com.grantingersoll.opengrok.analysis.c;
+package com.grantingersoll.opengrok.analysis.cxx;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 
 %%
@@ -36,6 +37,12 @@ return false;
 %eofval}
 %char
 
+%{
+    public CxxSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
+%}
+
 Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 
 %state STRING COMMENT SCOMMENT QSTRING
@@ -44,7 +51,7 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 
 <YYINITIAL> {
 {Identifier} {String id = yytext();
-                if(!CxxConsts.kwd.contains(id)) {
+                if(!Consts.kwd.contains(id)) {
                         setAttribs(id, yychar, yychar + yylength());
                         return true; }
               }

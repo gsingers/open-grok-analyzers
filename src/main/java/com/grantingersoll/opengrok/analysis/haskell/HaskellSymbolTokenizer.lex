@@ -27,6 +27,7 @@
 
 package com.grantingersoll.opengrok.analysis.haskell;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 /**
  * @author Harry Pan
@@ -45,6 +46,12 @@ super(in);
 return false;
 %eofval}
 %char
+
+%{
+    public HaskellSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
+%}
 
 Identifier = [a-zA-Z_] [a-zA-Z0-9_']*
 

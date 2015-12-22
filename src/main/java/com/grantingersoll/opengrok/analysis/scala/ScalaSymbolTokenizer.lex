@@ -27,6 +27,7 @@
 
 package com.grantingersoll.opengrok.analysis.scala;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
@@ -42,6 +43,12 @@ this.finalOffset =  zzEndRead;
 return false;
 %eofval}
 %char
+
+%{
+    public ScalaSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
+%}
 
 Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 

@@ -29,7 +29,7 @@ import java.util.Set;
   * Holds static hash set containing the Scala keywords
   */
 public class Consts{
-    public static final Set<String> kwd = new HashSet<String>() ;
+    public static final Set<String> kwd = new HashSet<>() ;
     static {
         //Note that keywords with 1 letter will be ignored since we need at least 2 chars per identifier
         kwd.add("abstract");
@@ -71,5 +71,4 @@ public class Consts{
         kwd.add("with");
         kwd.add("yield");
     }
-
 }

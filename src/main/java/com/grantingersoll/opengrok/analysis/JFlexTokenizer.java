@@ -29,6 +29,7 @@ import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
+import org.apache.lucene.util.AttributeFactory;
 
 /**
  *
@@ -61,7 +62,11 @@ public abstract class JFlexTokenizer extends Tokenizer {
     
     protected JFlexTokenizer() {
         super();
-    }        
+    }
+
+    protected JFlexTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
 
     /**
      * Reinitialize the tokenizer with new reader.
@@ -79,6 +84,17 @@ public abstract class JFlexTokenizer extends Tokenizer {
         super.close();
         this.yyclose();
     }
+
+    @Override
+    public final void end() throws IOException {
+        super.end();
+        // set final offset
+        int correctedFinalOffset = correctOffset(finalOffset);
+        offsetAtt.setOffset(correctedFinalOffset, correctedFinalOffset);
+        // adjust any skipped tokens
+        // posIncrAtt.setPositionIncrement(posIncrAtt.getPositionIncrement()+skippedPositions);
+    }
+
     protected CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     protected OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
     protected PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);

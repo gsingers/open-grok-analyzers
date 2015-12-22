@@ -29,13 +29,13 @@ import java.util.Map;
  * <pre class="prettyprint">
  * &lt;fieldType name="JavaScript_lang" class="solr.TextField" positionIncrementGap="100"&gt;
  *   &lt;analyzer&gt;
- *     &lt;tokenizer class="solr.JavaScriptTokenizerFactory"/&gt;
+ *     &lt;tokenizer class="solr.JavaScriptSymbolTokenizerFactory"/&gt;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
 public class JavaScriptSymbolTokenizerFactory extends TokenizerFactory {
 
-  /** Creates a new CSymbolTokenizerFactory */
+  /** Creates a new JavaScriptSymbolTokenizerFactory */
   public JavaScriptSymbolTokenizerFactory(Map<String,String> args) {
     super(args);
     if (!args.isEmpty()) {

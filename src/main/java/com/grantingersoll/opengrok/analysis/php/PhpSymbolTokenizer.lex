@@ -23,6 +23,7 @@
 
 package com.grantingersoll.opengrok.analysis.php;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 import java.util.*;
 
 %%
@@ -42,10 +43,10 @@ return false;
 %ignorecase
 %{
   private final static Set<String> PSEUDO_TYPES;
-  private Stack<String> docLabels = new Stack<String>();
+  private Stack<String> docLabels = new Stack<>();
 
   static {
-    PSEUDO_TYPES = new HashSet<String>(Arrays.asList(
+    PSEUDO_TYPES = new HashSet<>(Arrays.asList(
         new String[] {
             "string", "integer", "int", "boolean", "bool", "float", "double",
             "object", "mixed", "array", "resource", "void", "null", "callback",
@@ -60,6 +61,10 @@ return false;
 
   private static boolean isHtmlState(int state) {
     return state == YYINITIAL;
+  }
+
+  public PhpSymbolTokenizer(AttributeFactory factory) {
+    super(factory);
   }
 %}
 

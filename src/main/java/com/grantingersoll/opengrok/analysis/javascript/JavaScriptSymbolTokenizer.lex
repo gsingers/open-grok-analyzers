@@ -29,6 +29,7 @@ package com.grantingersoll.opengrok.analysis.javascript;
 import java.io.IOException;
 import java.io.Reader;
 import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
@@ -43,6 +44,12 @@ super(in);
 return false;
 %eofval}
 %char
+
+%{
+    public JavaScriptSymbolTokenizer(AttributeFactory factory) {
+        super(factory);
+    }
+%}
 
 Identifier = [a-zA-Z_$] [a-zA-Z0-9_$]*
 
