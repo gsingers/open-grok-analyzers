@@ -147,6 +147,11 @@ public class Consts{
         kwd.add("#pragma warning restore");
         kwd.add("#pragma warning disable");
     }
+
+    public static final String[] SUFFIXES = {
+        "CS"
+    };
+
 }
 
 
