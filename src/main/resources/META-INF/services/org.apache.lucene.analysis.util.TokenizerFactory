@@ -30,6 +30,7 @@ com.grantingersoll.opengrok.analysis.javascript.JavaScriptSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.lisp.LispSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.perl.PerlSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.php.PhpSymbolTokenizerFactory
+com.grantingersoll.opengrok.analysis.plain.PlainSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.python.PythonSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.scala.ScalaSymbolTokenizerFactory
 com.grantingersoll.opengrok.analysis.sh.ShSymbolTokenizerFactory

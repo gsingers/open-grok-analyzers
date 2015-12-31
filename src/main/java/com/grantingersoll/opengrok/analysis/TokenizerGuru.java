@@ -85,15 +85,24 @@ public class TokenizerGuru {
   /** Char length of a UTF-8 encoded BOM */
   private static final char UTF8_BOM = '\uFEFF';
 
+  /** Used to look inform tokenizer factories */
+  private static ClasspathResourceLoader CLASSPATH_RESOURCE_LOADER
+      = new ClasspathResourceLoader(TokenizerGuru.class.getClassLoader());
+
+
   static {
     try {
-      populateTokenizerFactoryMap(FILE_NAMES, "TokenizerFileNames.properties");
-      populateTokenizerFactoryMap(FILE_EXTENSIONS, "TokenizerFileExtensions.properties");
+      Map<String,TokenizerFactory> factorySingletons = new HashMap<>();
 
-      String filePrefixRegex = populateTokenizerFactoryMap(FILE_PREFIXES, "TokenizerFilePrefixes.properties");
+      populateTokenizerFactoryMap(FILE_NAMES, "TokenizerFileNames.properties", factorySingletons);
+      populateTokenizerFactoryMap(FILE_EXTENSIONS, "TokenizerFileExtensions.properties", factorySingletons);
+
+      String filePrefixRegex = populateTokenizerFactoryMap
+          (FILE_PREFIXES, "TokenizerFilePrefixes.properties", factorySingletons);
       FILE_PREFIX_PATTERN = Pattern.compile(filePrefixRegex, Pattern.CASE_INSENSITIVE);
 
-      String fileMagicsRegex = populateTokenizerFactoryMap(FILE_MAGICS, "TokenizerFileMagics.properties");
+      String fileMagicsRegex = populateTokenizerFactoryMap
+          (FILE_MAGICS, "TokenizerFileMagics.properties", factorySingletons);
       FILE_MAGIC_PATTERN = Pattern.compile(fileMagicsRegex);
 
       MAX_FILE_MAGIC_LENGTH = FILE_MAGICS.firstKey().length(); // First is longest
@@ -103,31 +112,32 @@ public class TokenizerGuru {
     }
   }
 
-  private static ClasspathResourceLoader CLASSPATH_RESOURCE_LOADER
-      = new ClasspathResourceLoader(TokenizerGuru.class.getClassLoader());
-  private static Map<String,TokenizerFactory> FACTORY_SINGLETONS = new HashMap<>();
-
   /**
    * Reads in the given properties file, where keys are tokenizer SPI names and values are
    * space-and-or-comma delimited, and adds each list value as a key, with an instantiated
    * tokenizer for the given SPI name as its value.
    *
-   * If the map is sorted, returns a regex alternation of all map keys, otherwise null.
+   * @param map The map to populate
+   * @param propertiesFile The name of the resource to read in as a properties file
+   * @param factorySingletons map of tokenizer SPI names to tokenizer factory, to be used to limit
+   *                          tokenizer factory instantiation to one per factory class.
+   * @return If the map is sorted, returns a regex alternation of all map keys, otherwise null.
    */
   private static String populateTokenizerFactoryMap
-  (Map<String,TokenizerFactory> map, String propertiesFile) throws IOException {
+  (Map<String,TokenizerFactory> map, String propertiesFile, Map<String,TokenizerFactory> factorySingletons)
+      throws IOException {
     for (String key : map.keySet()) {
       Properties values = new Properties();
       values.load(TokenizerGuru.class.getResourceAsStream(propertiesFile));
       for (Map.Entry<Object,Object> entry : values.entrySet()) {
         String tokenizerSPIname = (String) entry.getKey();
         String valueList = (String) entry.getValue();
-        TokenizerFactory factory = FACTORY_SINGLETONS.get(tokenizerSPIname);
+        TokenizerFactory factory = factorySingletons.get(tokenizerSPIname);
         if (factory == null) {
           factory = TokenizerFactory.forName
               (tokenizerSPIname, Collections.<String, String>emptyMap());
           ((ResourceLoaderAware) factory).inform(CLASSPATH_RESOURCE_LOADER);
-          FACTORY_SINGLETONS.put(tokenizerSPIname, factory);
+          factorySingletons.put(tokenizerSPIname, factory);
         }
         // Ignore backslash-escaped value list separators
         for (String value : valueList.trim().split("(?<!\\\\)(?:\\s*,\\s*|\\s+)")) {
