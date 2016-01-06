@@ -29,6 +29,9 @@ import java.util.Set;
 /**
  * Holds static hash set containing the Fortran keywords.
  * The list is based upon the draft available from http://j3-fortran.org/
+ *
+ * TODO: statement keywords (e.g. IF, READ, UNIT, KIND, and INTEGER) are NOT reserved words - the grammar needs to change to allow them as identifiers
+ * TODO: see section 2.5.2 in http://www.j3-fortran.org/doc/year/10/10-007.pdf
  */
 public class Consts {
 
@@ -92,8 +95,8 @@ public class Consts {
         kwd.add("command_argument_count");
         kwd.add("common");
         kwd.add("complex");
-        kwd.add("complex");
         kwd.add("conjg");
+        kwd.add("contains");
         kwd.add("continue");
         kwd.add("cos");
         kwd.add("cosh");
@@ -194,6 +197,7 @@ public class Consts {
         kwd.add("int2");
         kwd.add("int8");
         kwd.add("integer");
+        kwd.add("intent");
         kwd.add("ior");
         kwd.add("irand");
         kwd.add("is_iostat_end");
