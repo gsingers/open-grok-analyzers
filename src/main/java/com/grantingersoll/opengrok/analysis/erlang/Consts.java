@@ -28,37 +28,39 @@ import java.util.Set;
 
 /**
   * Holds static hash set containing the Erlang keywords
+  *
+  * Source: "Reserved Words" section at http://www.erlang.org/doc/reference_manual/introduction.html
   */
 public class Consts{
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         kwd.add("after");
-        kwd.add("begin");
-        kwd.add("case");
-        kwd.add("try");
-        kwd.add("cond");
-        kwd.add("catch");
+        kwd.add("and");
         kwd.add("andalso");
-        kwd.add("orelse");
+        kwd.add("band");
+        kwd.add("begin");
+        kwd.add("bnot");
+        kwd.add("bor");
+        kwd.add("bsl");
+        kwd.add("bsr");
+        kwd.add("bxor");
+        kwd.add("case");
+        kwd.add("catch");
+        kwd.add("cond");
+        kwd.add("div");
         kwd.add("end");
         kwd.add("fun");
         kwd.add("if");
         kwd.add("let");
-        kwd.add("of");
-        kwd.add("query");
-        kwd.add("receive");
-        kwd.add("when");
-        kwd.add("bnot");
         kwd.add("not");
-        kwd.add("div");
-        kwd.add("rem");
-        kwd.add("band");
-        kwd.add("and");
-        kwd.add("bor");
-        kwd.add("bxor");
-        kwd.add("bsl");
-        kwd.add("bsr");
+        kwd.add("of");
         kwd.add("or");
+        kwd.add("orelse");
+        // kwd.add("query"); // query no longer reserved as of Erlang R16B - see https://github.com/ignatov/intellij-erlang/issues/220
+        kwd.add("receive");
+        kwd.add("rem");
+        kwd.add("try");
+        kwd.add("when");
         kwd.add("xor");
     }
 }

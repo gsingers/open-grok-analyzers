@@ -36,7 +36,6 @@ super(in);
 %init}
 %type boolean
 %eofval{
-this.finalOffset=zzEndRead;
 return false;
 %eofval}
 %char
@@ -66,6 +65,16 @@ return false;
   public PhpSymbolTokenizer(AttributeFactory factory) {
     super(factory);
   }
+
+  @Override
+  protected void yysetreader(java.io.Reader in) {
+    zzReader = in;
+  }
+
+    @Override
+    public int yychar() {
+        return yychar;
+    }
 %}
 
 WhiteSpace     = [ \t]+

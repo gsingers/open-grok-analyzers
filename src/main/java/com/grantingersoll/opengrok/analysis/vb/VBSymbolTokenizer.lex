@@ -22,7 +22,7 @@
  */
 
 /*
- * Gets Java symbols - ignores comments, strings, keywords
+ * Gets VB symbols - ignores comments, strings, keywords
  */
 
 package com.grantingersoll.opengrok.analysis.vb;
@@ -48,6 +48,16 @@ return false;
 %{
     public VBSymbolTokenizer(AttributeFactory factory) {
         super(factory);
+    }
+
+    @Override
+    protected void yysetreader(java.io.Reader in) {
+        zzReader = in;
+    }
+
+    @Override
+    public int yychar() {
+        return yychar;
     }
 %}
 

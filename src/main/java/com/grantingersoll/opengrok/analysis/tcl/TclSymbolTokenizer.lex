@@ -50,6 +50,16 @@ return false;
     public TclSymbolTokenizer(AttributeFactory factory) {
         super(factory);
     }
+
+    @Override
+    protected void yysetreader(java.io.Reader in) {
+        zzReader = in;
+    }
+
+    @Override
+    public int yychar() {
+        return yychar;
+    }
 %}
 
 Identifier = [\:\=a-zA-Z0-9_]+

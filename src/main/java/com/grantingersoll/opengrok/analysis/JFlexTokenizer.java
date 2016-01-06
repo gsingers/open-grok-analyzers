@@ -53,19 +53,28 @@ public abstract class JFlexTokenizer extends Tokenizer {
 
     abstract public void yybegin(int newState);
 
-    abstract public int yystate();    
+    abstract public int yystate();
+
+    abstract public int yychar();
+
+    abstract public int yylength();
+
+    abstract protected void yysetreader(Reader in);
     
     //TODO can be removed once we figure out jflex generation of empty constructor
     protected JFlexTokenizer(Reader in) {
         super();
+        this.yysetreader(input); // ignore the given reader
     }
     
     protected JFlexTokenizer() {
         super();
+        this.yysetreader(input);
     }
 
     protected JFlexTokenizer(AttributeFactory factory) {
         super(factory);
+        this.yysetreader(input);
     }
 
     /**
@@ -89,7 +98,7 @@ public abstract class JFlexTokenizer extends Tokenizer {
     public final void end() throws IOException {
         super.end();
         // set final offset
-        int correctedFinalOffset = correctOffset(finalOffset);
+        int correctedFinalOffset = correctOffset(yychar() + yylength());
         offsetAtt.setOffset(correctedFinalOffset, correctedFinalOffset);
         // adjust any skipped tokens
         // posIncrAtt.setPositionIncrement(posIncrAtt.getPositionIncrement()+skippedPositions);
@@ -98,7 +107,6 @@ public abstract class JFlexTokenizer extends Tokenizer {
     protected CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
     protected OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
     protected PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
-    protected int finalOffset;
 
     /**
      * This will re-initalize internal AttributeImpls, or it returns false if

@@ -45,18 +45,28 @@ return false;
     public FortranSymbolTokenizer(AttributeFactory factory) {
         super(factory);
     }
+
+    @Override
+    protected void yysetreader(java.io.Reader in) {
+        zzReader = in;
+    }
+
+    @Override
+    public int yychar() {
+        return yychar;
+    }
 %}
 
 Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 Label = [0-9]+
 
-%state STRING COMMENT SCOMMENT QSTRING
+%state STRING SCOMMENT QSTRING
 
 %%
 
 <YYINITIAL> {
  ^{Label} { }
- ^[^ \t\f\r\n]+ { yybegin(SCOMMENT); }
+ ^[*cC!] { yybegin(SCOMMENT); }
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id.toLowerCase())) {
                         setAttribs(id, yychar, yychar + yylength());
@@ -76,15 +86,11 @@ Label = [0-9]+
  \'     { yybegin(YYINITIAL); }
 }
 
-<COMMENT> {
-"*/"    { yybegin(YYINITIAL);}
-}
-
 <SCOMMENT> {
 \n      { yybegin(YYINITIAL);}
 }
 
-<YYINITIAL, STRING, COMMENT, SCOMMENT, QSTRING> {
+<YYINITIAL, STRING, SCOMMENT, QSTRING> {
 <<EOF>>   { return false;}
 [^]    {}
 }

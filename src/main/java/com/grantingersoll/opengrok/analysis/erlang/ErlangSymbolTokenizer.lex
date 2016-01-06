@@ -46,9 +46,19 @@ return false;
     public ErlangSymbolTokenizer(AttributeFactory factory) {
         super(factory);
     }
+
+    @Override
+    protected void yysetreader(java.io.Reader in) {
+        zzReader = in;
+    }
+
+    @Override
+    public int yychar() {
+        return yychar;
+    }
 %}
 
-Identifier = [A-Z_] [a-zA-Z0-9_@]*
+Identifier = [a-zA-Z_] [a-zA-Z0-9_@]*
 
 %state STRING COMMENT QATOM
 

@@ -31,7 +31,6 @@ import org.apache.lucene.util.AttributeFactory;
 %unicode
 %type boolean
 %eofval{
-this.finalOffset = zzEndRead;
 return false;
 %eofval}
 %char
@@ -39,6 +38,16 @@ return false;
 %{
     public PlainSymbolTokenizer(AttributeFactory factory) {
         super(factory);
+    }
+
+    @Override
+    protected void yysetreader(java.io.Reader in) {
+        zzReader = in;
+    }
+
+    @Override
+    public int yychar() {
+        return yychar;
     }
 %}
 

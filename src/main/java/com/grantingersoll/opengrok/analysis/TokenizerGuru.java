@@ -30,6 +30,7 @@ import org.apache.lucene.analysis.util.TokenizerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.Comparator;
@@ -126,25 +127,25 @@ public class TokenizerGuru {
   private static String populateTokenizerFactoryMap
   (Map<String,TokenizerFactory> map, String propertiesFile, Map<String,TokenizerFactory> factorySingletons)
       throws IOException {
-    for (String key : map.keySet()) {
-      Properties values = new Properties();
-      values.load(TokenizerGuru.class.getResourceAsStream(propertiesFile));
-      for (Map.Entry<Object,Object> entry : values.entrySet()) {
-        String tokenizerSPIname = (String) entry.getKey();
-        String valueList = (String) entry.getValue();
-        TokenizerFactory factory = factorySingletons.get(tokenizerSPIname);
-        if (factory == null) {
-          factory = TokenizerFactory.forName
-              (tokenizerSPIname, Collections.<String, String>emptyMap());
-          ((ResourceLoaderAware) factory).inform(CLASSPATH_RESOURCE_LOADER);
-          factorySingletons.put(tokenizerSPIname, factory);
+    Properties values = new Properties();
+    InputStream stream = TokenizerGuru.class.getResourceAsStream(propertiesFile);
+    values.load(stream);
+    for (Map.Entry<Object,Object> entry : values.entrySet()) {
+      String tokenizerSPIname = (String) entry.getKey();
+      String valueList = (String) entry.getValue();
+      TokenizerFactory factory = factorySingletons.get(tokenizerSPIname);
+      if (factory == null) {
+        factory = TokenizerFactory.forName(tokenizerSPIname, Collections.<String, String>emptyMap());
+        if (factory instanceof ResourceLoaderAware) {
+          ((ResourceLoaderAware)factory).inform(CLASSPATH_RESOURCE_LOADER);
         }
-        // Ignore backslash-escaped value list separators
-        for (String value : valueList.trim().split("(?<!\\\\)(?:\\s*,\\s*|\\s+)")) {
-          value = value.replaceAll("\\A\\s+|(?<!\\\\)\\s+\\z", ""); // trim non-escaped prefix/suffix whitespace
-          value = value.replaceAll("\\\\(.)", "$1"); // unescape backslash-escaped chars
-          map.put(value, factory);
-        }
+        factorySingletons.put(tokenizerSPIname, factory);
+      }
+      // Ignore backslash-escaped value list separators
+      for (String value : valueList.trim().split("(?<!\\\\)(?:\\s*,\\s*|\\s+)")) {
+        value = value.replaceAll("\\A\\s+|(?<!\\\\)\\s+\\z", ""); // trim non-escaped prefix/suffix whitespace
+        value = value.replaceAll("\\\\(.)", "$1"); // unescape backslash-escaped chars
+        map.put(value, factory);
       }
     }
     // The regex is only needed for prefix matching, in which case the map keys are sorted longest-first
@@ -242,17 +243,24 @@ public class TokenizerGuru {
    */
   public static TokenizerFactory find(Reader in) throws IOException {
     TokenizerFactory factory = null;
-
-    in.mark(MAX_FILE_MAGIC_LENGTH + 1); // Add one for UTF-8 BOM
-    char[] content = new char[MAX_FILE_MAGIC_LENGTH + 1]; // Add one for UTF-8 BOM
-    int len = in.read(content);
-    in.reset();
-
-    // Ignore the UTF-8 BOM, if any
-    int bomSkipOffset = content[0] == UTF8_BOM ? 1 : 0;
-    String contentPrefix = new String(content, bomSkipOffset, len - bomSkipOffset);
-    if (contentPrefix.length() >= MIN_FILE_MAGIC_LENGTH) {
-      factory = findMagic(contentPrefix);
+    boolean shouldReset = false;
+    try {
+      if (in.markSupported()) {
+        in.mark(MAX_FILE_MAGIC_LENGTH + 1); // Add one for UTF-8 BOM
+        shouldReset = true;
+      }
+      char[] content = new char[MAX_FILE_MAGIC_LENGTH + 1]; // Add one for UTF-8 BOM
+      int len = in.read(content);
+      // Ignore the UTF-8 BOM, if any
+      int bomSkipOffset = content[0] == UTF8_BOM ? 1 : 0;
+      String contentPrefix = new String(content, bomSkipOffset, len - bomSkipOffset);
+      if (contentPrefix.length() >= MIN_FILE_MAGIC_LENGTH) {
+        factory = findMagic(contentPrefix);
+      }
+    } finally {
+      if (shouldReset) {
+        in.reset();
+      }
     }
     return factory;
   }
