@@ -89,7 +89,7 @@ public class TestShSymbolTokenizer extends BaseTokenStreamTestCase {
                                                                                       //// # Dummy wrapper-script to set up the PYTHONPATH and start bzr..
         "PYTHONPATH", "HOME", "bin", "bazaar", "lib", "python2", "site", "packages",  //// PYTHONPATH=${HOME}/bin/bazaar/lib/python2.5/site-packages
         "LC_ALL",                                                                     //// LC_ALL="C"
-        "PYTHONPATH", "LC_ALL",                                                          //// export PYTHONPATH LC_ALL
+        "PYTHONPATH", "LC_ALL",                                                       //// export PYTHONPATH LC_ALL
         "HOME", "bin", "bazaar", "bin", "bzr",                                        //// ${HOME}/bin/bazaar/bin/bzr "$@"
                                                                                       //// exit $?
                                                                                       ////
