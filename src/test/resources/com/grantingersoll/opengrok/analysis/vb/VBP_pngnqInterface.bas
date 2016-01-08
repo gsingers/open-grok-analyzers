@@ -1,4 +1,4 @@
-'From https://github.com/tannerhelland/PhotoDemon/blob/master/Modules/VBP_pngnqInterface.bas
+''''From https://github.com/tannerhelland/PhotoDemon/blob/master/Modules/VBP_pngnqInterface.bas
 
 Attribute VB_Name = "Plugin_PNGQuant_Interface"
 '***************************************************************************

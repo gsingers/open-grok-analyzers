@@ -65,12 +65,17 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 
 %%
 
+// TODO: recognize symbols in interpolated strings
+// TODO: recognize all numeric formats (exponents, long?, double?), to block false Identifier recognition
+
 <YYINITIAL> {
+"0" [xX][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "x..." (after "0") as an Identifier
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id)){
                         setAttribs(id, yychar, yychar + yylength());
                         return true; }
               }
+ ("raw"|[sf]) \" { yybegin(STRING); } // Interpolated strings
  \"     { yybegin(STRING); }
  \'     { yybegin(QSTRING); }
  "/*"   { yybegin(COMMENT); }

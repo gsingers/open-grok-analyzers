@@ -59,6 +59,10 @@ return false;
 
 Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 Label = [0-9]+
+BinaryLiteral = ([bB] ("'" [01]+ "'"|"\"" [01]+ "\"") | ("'" [01]+ "'"|"\"" [01]+ "\"") [bB])
+OctalLiteral = ([oO] ("'" [0-7]+ "'"|"\"" [0-7]+ "\"") | ("'" [0-7]+ "'"|"\"" [0-7]+ "\"") [oO])
+HexLiteral = ([zZxX] ("'" [0-9a-fA-F]+ "'"|"\"" [0-9a-fA-F]+ "\"") | ("'" [0-9a-fA-F]+ "'"|"\"" [0-9a-fA-F]+ "\"") [zZxX])
+BOZliteral = {BinaryLiteral} | {OctalLiteral} | {HexLiteral}
 
 %state STRING SCOMMENT QSTRING
 
@@ -67,6 +71,7 @@ Label = [0-9]+
 <YYINITIAL> {
  ^{Label} { }
  ^[*cC!] { yybegin(SCOMMENT); }
+{BOZliteral} {} // Ignore numeric literals, to block (partial) recognition as Identifiers
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id.toLowerCase())) {
                         setAttribs(id, yychar, yychar + yylength());

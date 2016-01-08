@@ -79,7 +79,7 @@ return false;
 
 WhiteSpace     = [ \t]+
 EOL = \r|\n|\r\n
-Identifier = [a-zA-Z_\u007F-\u10FFFF] [a-zA-Z0-9_\u007F-\u10FFFF]*
+Identifier = [a-zA-Z_\u007F-\U10FFFF] [a-zA-Z0-9_\u007F-\U10FFFF]*
 
 URIChar = [\?\+\%\&\:\/\.\@\_\;\=\$\,\-\!\~\*\\]
 FNameChar = [a-zA-Z0-9_\-\.]

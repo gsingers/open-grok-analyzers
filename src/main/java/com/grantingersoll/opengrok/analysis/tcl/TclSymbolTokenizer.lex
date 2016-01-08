@@ -62,18 +62,70 @@ return false;
     }
 %}
 
-Identifier = [\:\=a-zA-Z0-9_]+
+// From http://tmml.sourceforge.net/doc/tcl/Tcl.html:
+//
+// $name
+//
+// Name is the name of a scalar variable; the name is a sequence of one or more
+// characters that are a letter, digit, underscore, or namespace separators
+// (two or more colons). Letters and digits are only the standard ASCII ones
+// (0-9, A-Z and a-z).
+//
+// $name(index)
+//
+// Name gives the name of an array variable and index gives the name of an
+// element within that array. Name must contain only letters, digits,
+// underscores, and namespace separators, and may be an empty string.
+// Letters and digits are only the standard ASCII ones (0-9, A-Z and a-z).
+// Command substitutions, variable substitutions, and backslash substitutions
+// are performed on the characters of index.
+//
+// ${name}
+//
+// Name is the name of a scalar variable or array element. It may contain any
+// characters whatsoever except for close braces. It indicates an array element
+// if name is in the form "arrayName(index)" where arrayName does not contain
+// any open parenthesis characters, "(", or close brace characters, "}", and
+// index can be any sequence of characters except for close brace characters.
+// No further substitutions are performed during the parsing of name.
+
+BareIdentifier = (":" ":"+)? [a-zA-Z_] [a-zA-Z0-9_]* (":" ":"+ [a-zA-Z_] [a-zA-Z0-9_]* )*
+DereferencedIdentifier = "$" {BareIdentifier}
+DereferencedBracketedArrayElement = "${" [^(]* "(" [^\)\}]* ")}"
+DereferencedBracketedIdentifier = "${" [^\}]* "}"
 
 %state STRING COMMENT SCOMMENT
 
 %%
 
+// TODO: recognize identifiers in interpolated strings (double quotes)
+
 <YYINITIAL> {
-{Identifier} {String id = yytext();
-              if (!Consts.kwd.contains(id)) {
-                    setAttribs(id, yychar, yychar + yylength());
-                    return true; }
-              }
+"0" [xX][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "x..." (after "0") as an Identifier
+{BareIdentifier} { String id = yytext();
+                   if (!Consts.kwd.contains(id)) {
+                        setAttribs(id, yychar, yychar + yylength());
+                        return true;
+                   }
+                 }
+{DereferencedIdentifier} { String id = yytext().substring(1);
+                           setAttribs(id, yychar + 1, yychar + yylength());
+                           return true;
+                         }
+{DereferencedBracketedArrayElement} { String id = yytext().substring(2);
+                                      int elemStartPos = id.indexOf('(');
+                                      id = id.substring(0, elemStartPos);
+                                      setAttribs(id, yychar + 2, yychar + 2 + elemStartPos);
+                                      // Ignore the (array-element) part: it's an uninterpolated associative array index
+                                      return true;
+                                    }
+{DereferencedBracketedIdentifier} { if (yylength() > 3) { // Ignore the zero-length identifier
+                                      String id = yytext().substring(2, yytext().length() - 1);
+                                      setAttribs(id, yychar + 2, yychar + yylength() - 1);
+                                      return true;
+                                    }
+                                  }
+
  \"     { yybegin(STRING); }
 "#"     { yybegin(SCOMMENT); }
 }

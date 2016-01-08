@@ -60,7 +60,14 @@ public class TestPlainSymbolTokenizer extends BaseTokenStreamTestCase {
       input = IOUtils.toString(in);
     }
     String[] output = new String[] {
-
+        "Sample", "plain", "text",                                  //// Sample plain text
+                                                                    //// -----------------
+                                                                    ////
+        "Some", "words", "in", "here", "Two", "single", "letters",  //// Some words in here.  Two single letters: a, b.
+                                                                    ////
+        "More", "than", "tokens", "fewer", "than",                  //// More than 3 tokens, fewer than 10,000.
+                                                                    ////
+                                                                    ////
     };
     assertAnalyzesTo(analyzer, input, output);
   }

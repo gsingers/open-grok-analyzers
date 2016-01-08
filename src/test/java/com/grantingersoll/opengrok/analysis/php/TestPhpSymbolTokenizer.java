@@ -53,6 +53,13 @@ public class TestPhpSymbolTokenizer extends BaseTokenStreamTestCase {
   }
 
   @Test
+  public void testHexLiteral() throws Exception {
+    String input = "0xFFFF";
+    String[] output = new String[] {}; // zero output tokens
+    assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
   public void test() throws Exception {
     String input;
     try (InputStream stream = TestPhpSymbolTokenizer.class.getResourceAsStream("my_php.inc");
@@ -60,7 +67,35 @@ public class TestPhpSymbolTokenizer extends BaseTokenStreamTestCase {
       input = IOUtils.toString(in);
     }
     String[] output = new String[] {
-
+                                                                                                                                //// <?php
+                                                                                                                                //// /**
+                                                                                                                                ////  *
+                                                                                                                                ////  * @file
+                                                                                                                                ////  * @brief
+                                                                                                                                ////  *
+                                                                                                                                ////  * @responsible
+                                                                                                                                ////  * @author
+                                                                                                                                ////  * @version
+                                                                                                                                ////  * @copyright
+                                                                                                                                ////  */
+                                                                                                                                ////
+        "ConnectivityAssistant", "ManagerRpc",                                                                                  //// class ConnectivityAssistant extends ManagerRpc {
+        "p_result",                                                                                                             //// 	public $p_result = '';
+        "p_parameters",                                                                                                         //// 	protected $p_parameters = array(
+                                                                                                                                //// 				'set' => array(
+                                                                                                                                //// 					'config'  => 'array',
+                                                                                                                                //// 					'revertTimeout' => 'integer'
+                                                                                                                                //// 				)
+                                                                                                                                //// 	);
+                                                                                                                                ////
+        "p_manager",                                                                                                            ////   protected $p_manager = 'myproduct::ConnectivityAssistant';
+                                                                                                                                ////
+        "set", "p_config", "p_revertTimeout",                                                                                   //// 	public function set($p_config, $p_revertTimeout) {
+        "this", "p_handleResponse", "p_errors", "this", "p_call", "set", "p_result", "p_config", "p_revertTimeout", "p_result"  //// 		return $this->p_handleResponse(&$p_errors, $this->p_call()->set(&$p_result, $p_config, $p_revertTimeout), $p_result);
+                                                                                                                                //// 	}
+                                                                                                                                //// }; // Configuration
+                                                                                                                                //// ?>
+                                                                                                                                ////
     };
     assertAnalyzesTo(analyzer, input, output);
   }

@@ -34,7 +34,7 @@ import java.util.Set;
 public class Consts {
     public static final Set<String> kwd = new HashSet<>();
     static {
-        // Go Programming Language Specification 2015
+        // Go Programming Language Specification 2015: https://golang.org/ref/spec
         kwd.add("break");
         kwd.add("case");
         kwd.add("chan");

@@ -53,6 +53,13 @@ public class TestClojureSymbolTokenizer extends BaseTokenStreamTestCase {
   }
 
   @Test
+  public void testHexLiteral() throws Exception {
+    String input = "0xFFFF";
+    String[] output = new String[] {}; // zero output tokens
+    assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
   public void test() throws Exception {
     String input;
     try (InputStream stream = TestClojureSymbolTokenizer.class.getResourceAsStream("main.clj");

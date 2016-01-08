@@ -67,7 +67,13 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 
 %%
 
+// TODO: recognize POD format as comments
+// TODO: handle full numeric syntax, to prohibit false Identifier recognition (underscores, exponents)
+// TODO: handle *all* quoting constructs: tr///, q//, qq//, s///, heredocs
+// TODO: recognize symbols in interpolated strings (including heredocs)
+
 <YYINITIAL> {
+"0" [xX][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "x..." (after "0") as an Identifier
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id)){
                         setAttribs(id, yychar, yychar + yylength());

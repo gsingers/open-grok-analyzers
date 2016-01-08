@@ -53,6 +53,13 @@ public class TestErlangSymbolTokenizer extends BaseTokenStreamTestCase {
   }
 
   @Test
+  public void testHexLiteral() throws Exception {
+    String input = "16#FFFF";
+    String[] output = new String[] {}; // zero output tokens
+    assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
   public void test() throws Exception {
     String input;
     try (InputStream stream = TestErlangSymbolTokenizer.class.getResourceAsStream("pg_async.erl");

@@ -68,6 +68,7 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 %%
 
 <YYINITIAL> {
+"0" [xX][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "x..." (after "0") as an Identifier
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id)){
                         setAttribs(id, yychar, yychar + yylength());

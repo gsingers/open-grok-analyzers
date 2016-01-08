@@ -68,6 +68,8 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_]*
 %%
 
 <YYINITIAL> {
+"&" [hH][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "h..." (after "&") as an Identifier
+"&" [oO][0-7]+ {} // Ignore octal literals, to block recognition of "o..." (after "&") as an Identifier
 {Identifier} {String id = yytext();
                 if(!Consts.getReservedKeywords().contains(id)){
                         setAttribs(id, yychar, yychar + yylength());

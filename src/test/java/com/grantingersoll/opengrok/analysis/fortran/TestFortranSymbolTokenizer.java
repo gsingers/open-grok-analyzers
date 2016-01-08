@@ -53,6 +53,24 @@ public class TestFortranSymbolTokenizer extends BaseTokenStreamTestCase {
   }
 
   @Test
+  public void testNumericLiterals() throws Exception {
+    String[] output = new String[] {}; // zero output tokens
+
+    // binary
+    String input = "b'11' + '11'b + b\"11\" + \"11\"b + B'11' + '11'B + B\"11\" + \"11\"B";
+    assertAnalyzesTo(analyzer, input, output);
+
+    // octal
+    input = "o'77' + '77'o + o\"77\" + \"77\"o + O'77' + '77'O + O\"77\" + \"77\"O";
+    assertAnalyzesTo(analyzer, input, output);
+
+    // hex
+    input = "z'ff' + 'ff'z + z\"FF\" + \"FF\"z + Z'FF' + 'FF'Z + Z\"ff\" + \"ff\"Z"
+        + "x'FF' + 'FF'x + x\"ff\" + \"ff\"x + X'ff' + 'ff'X + X\"FF\" + \"FF\"X";
+    assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
   public void test() throws Exception {
     String input;
     try (InputStream stream = TestFortranSymbolTokenizer.class.getResourceAsStream("hello.f90");

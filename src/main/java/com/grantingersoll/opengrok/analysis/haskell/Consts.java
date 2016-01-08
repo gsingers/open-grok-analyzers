@@ -57,5 +57,6 @@ public class Consts {
         kwd.add("then");
         kwd.add("type");
         kwd.add("where");
+        kwd.add("_");
     }
 }

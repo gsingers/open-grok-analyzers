@@ -63,13 +63,15 @@ return false;
     }
 %}
 
-Identifier = [\-\+\*\!\@\$\%\&\/\?\.\,\:\{\}\=a-zA-Z0-9_\<\>]+
+Identifier = [\-\+\*\!\@\$\%\&\/\?\.\,\:\{\}\=a-zA-Z_\<\>] [\-\+\*\!\@\$\%\&\/\?\.\,\:\{\}\=a-zA-Z0-9_\<\>]*
 
 %state STRING COMMENT SCOMMENT
 
 %%
 
 <YYINITIAL> {
+"#" [xX][0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of "x..." (after "#") as an Identifier
+"#" [oO][0-7]+ {} // Ignore octal literals, to block recognition of "o..." (after "#") as an Identifier
 {Identifier} {String id = yytext();
               if (!Consts.kwd.contains(id.toLowerCase())) {
                         setAttribs(id, yychar, yychar + yylength());

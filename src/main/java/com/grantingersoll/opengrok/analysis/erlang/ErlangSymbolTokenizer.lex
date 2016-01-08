@@ -65,6 +65,8 @@ Identifier = [a-zA-Z_] [a-zA-Z0-9_@]*
 %%
 
 <YYINITIAL> {
+// TODO: recognize all possible base prefixes: 2-32
+"16#" [0-9a-fA-F]+ {} // Ignore hex literals, to block recognition of hex digits (after "16#") as an Identifier
 {Identifier} {String id = yytext();
                 if(!Consts.kwd.contains(id)){
                         setAttribs(id, yychar, yychar + yylength());
