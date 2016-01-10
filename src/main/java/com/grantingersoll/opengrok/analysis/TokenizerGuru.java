@@ -86,7 +86,7 @@ public class TokenizerGuru {
   /** Char length of a UTF-8 encoded BOM */
   private static final char UTF8_BOM = '\uFEFF';
 
-  /** Used to look inform tokenizer factories */
+  /** Used to inform tokenizer factories */
   private static ClasspathResourceLoader CLASSPATH_RESOURCE_LOADER
       = new ClasspathResourceLoader(TokenizerGuru.class.getClassLoader());
 
