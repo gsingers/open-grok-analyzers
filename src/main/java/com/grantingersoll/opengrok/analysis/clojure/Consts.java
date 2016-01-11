@@ -30,6 +30,9 @@ import java.util.Set;
   * Holds static hash set containing Clojure 1.6 keywords
   */
 public class Consts {
+    public static final String SOURCE_CODE_LANGUAGE = "Clojure";
+    public static final String MIME_TYPE = "text/x-clojure";
+
     public static final Set<String> kwd = new HashSet<>();
     static {
         kwd.add("nil");

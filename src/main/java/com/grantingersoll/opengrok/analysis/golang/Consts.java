@@ -32,6 +32,9 @@ import java.util.Set;
  */
 
 public class Consts {
+    public static final String SOURCE_CODE_LANGUAGE = "Golang";
+    public static final String MIME_TYPE = "text/x-go";
+
     public static final Set<String> kwd = new HashSet<>();
     static {
         // Go Programming Language Specification 2015: https://golang.org/ref/spec

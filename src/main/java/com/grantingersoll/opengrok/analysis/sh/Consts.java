@@ -30,6 +30,9 @@ import java.util.Set;
  * Shell keyword hash
  */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "Shell Script";
+    public static final String MIME_TYPE = "application/x-sh";
+
     public static final Set<String> shkwd = new HashSet<>() ;
     static {
         // Built-in shell commands mentioned in shell_builtins(1)

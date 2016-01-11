@@ -32,6 +32,9 @@ import java.util.Set;
   * Source: "Reserved Words" section at http://www.erlang.org/doc/reference_manual/introduction.html
   */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "Erlang";
+    public static final String MIME_TYPE = "text/x-erlang";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         kwd.add("after");

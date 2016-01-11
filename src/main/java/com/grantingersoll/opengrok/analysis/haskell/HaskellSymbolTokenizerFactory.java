@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.haskell;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class HaskellSymbolTokenizerFactory extends TokenizerFactory {
+public class HaskellSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new HaskellSymbolTokenizerFactory */
   public HaskellSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class HaskellSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public HaskellSymbolTokenizer create(AttributeFactory factory) {
     return new HaskellSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }

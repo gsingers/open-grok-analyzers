@@ -44,6 +44,12 @@ public abstract class JFlexTokenizer extends Tokenizer {
 
     protected Stack<Integer> stack = new Stack<>();
 
+    /** Returns MIME type for the source code tokenized by this tokenizer. */
+    abstract public String getMimeType();
+
+    /** Returns the name of the language of the source code tokenized by this tokenizer. */
+    abstract public String getSourceCodeLanguage();
+
     // default jflex scanner methods and variables
     abstract public boolean yylex() throws IOException;
 

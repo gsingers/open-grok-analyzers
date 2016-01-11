@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.haskell;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -195,5 +196,17 @@ public class TestHaskellSymbolTokenizer extends BaseTokenStreamTestCase {
         "loop", "sz", "bs", "b2",                                                            ////             else loop sz bs b2
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new HaskellSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-haskell", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new HaskellSymbolTokenizer(newAttributeFactory());
+    assertEquals("Haskell", tokenizer.getSourceCodeLanguage());
   }
 }

@@ -33,6 +33,9 @@ import java.util.Set;
 @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
 public final class Consts {
 
+    public static final String SOURCE_CODE_LANGUAGE = "Visual Basic";
+    public static final String MIME_TYPE = "text/x-vbasic";
+
     private static final Set<String> reservedKeywords;
 
     static {

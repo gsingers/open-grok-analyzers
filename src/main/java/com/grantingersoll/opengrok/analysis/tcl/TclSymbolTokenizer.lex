@@ -60,6 +60,16 @@ return false;
     public int yychar() {
         return yychar;
     }
+
+    @Override
+    public String getSourceCodeLanguage() {
+        return Consts.SOURCE_CODE_LANGUAGE;
+    }
+
+    @Override
+    public String getMimeType() {
+        return Consts.MIME_TYPE;
+    }
 %}
 
 // From http://tmml.sourceforge.net/doc/tcl/Tcl.html:

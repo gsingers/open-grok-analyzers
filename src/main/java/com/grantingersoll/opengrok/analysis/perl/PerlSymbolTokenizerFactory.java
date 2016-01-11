@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.perl;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class PerlSymbolTokenizerFactory extends TokenizerFactory {
+public class PerlSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new PerlSymbolTokenizerFactory */
   public PerlSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class PerlSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public PerlSymbolTokenizer create(AttributeFactory factory) {
     return new PerlSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }

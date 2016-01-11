@@ -30,6 +30,9 @@ import java.util.Set;
   * Holds static hash set containing the Python keywords
   */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "Python";
+    public static final String MIME_TYPE = "text/x-python";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         kwd.add( "and" );

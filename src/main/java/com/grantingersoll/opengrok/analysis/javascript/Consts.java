@@ -33,6 +33,9 @@ import java.util.Set;
  * 
  */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "JavaScript";
+    public static final String MIME_TYPE = "application/javascript";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         //constants

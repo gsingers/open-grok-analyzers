@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.fortran;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -127,5 +128,17 @@ public class TestFortranSymbolTokenizer extends BaseTokenStreamTestCase {
                              ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new FortranSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-fortran", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new FortranSymbolTokenizer(newAttributeFactory());
+    assertEquals("Fortran", tokenizer.getSourceCodeLanguage());
   }
 }

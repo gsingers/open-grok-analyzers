@@ -30,6 +30,8 @@ import java.util.Set;
  * Holds static hash set containing the C and C++ keywords
  */
 public class Consts {
+    public static final String SOURCE_CODE_LANGUAGE = "C++";
+    public static final String MIME_TYPE = "text/x-c++src";
 
     public static final Set<String> kwd = new HashSet<>();
 

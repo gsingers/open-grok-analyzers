@@ -19,6 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.c;
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -117,5 +118,17 @@ public class TestCSymbolTokenizer extends BaseTokenStreamTestCase {
                                        ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new CSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-csrc", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new CSymbolTokenizer(newAttributeFactory());
+    assertEquals("C", tokenizer.getSourceCodeLanguage());
   }
 }

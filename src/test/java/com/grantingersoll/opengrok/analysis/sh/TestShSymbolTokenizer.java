@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.sh;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -95,5 +96,17 @@ public class TestShSymbolTokenizer extends BaseTokenStreamTestCase {
                                                                                       ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new ShSymbolTokenizer(newAttributeFactory());
+    assertEquals("application/x-sh", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new ShSymbolTokenizer(newAttributeFactory());
+    assertEquals("Shell Script", tokenizer.getSourceCodeLanguage());
   }
 }

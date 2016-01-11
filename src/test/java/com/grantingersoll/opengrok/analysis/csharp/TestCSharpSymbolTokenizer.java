@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.csharp;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -112,5 +113,17 @@ public class TestCSharpSymbolTokenizer extends BaseTokenStreamTestCase {
                                         ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new CSharpSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-csharp", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new CSharpSymbolTokenizer(newAttributeFactory());
+    assertEquals("C#", tokenizer.getSourceCodeLanguage());
   }
 }

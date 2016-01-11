@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.clojure;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,18 +33,28 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class ClojureSymbolTokenizerFactory extends TokenizerFactory {
+public class ClojureSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
-    /** Creates a new ClojureSymbolTokenizerFactory */
-    public ClojureSymbolTokenizerFactory(Map<String,String> args) {
-      super(args);
-      if (!args.isEmpty()) {
-        throw new IllegalArgumentException("Unknown parameters: " + args);
-      }
+  /** Creates a new ClojureSymbolTokenizerFactory */
+  public ClojureSymbolTokenizerFactory(Map<String,String> args) {
+    super(args);
+    if (!args.isEmpty()) {
+      throw new IllegalArgumentException("Unknown parameters: " + args);
     }
+  }
 
-    @Override
-    public ClojureSymbolTokenizer create(AttributeFactory factory) {
-      return new ClojureSymbolTokenizer(factory);
-    }
+  @Override
+  public ClojureSymbolTokenizer create(AttributeFactory factory) {
+    return new ClojureSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
+  }
 }

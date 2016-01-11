@@ -30,6 +30,9 @@ import java.util.Set;
   * Holds static hash set containing Lisp keywords
   */
 public class Consts {
+    public static final String SOURCE_CODE_LANGUAGE = "Lisp";
+    public static final String MIME_TYPE = "application/x-lisp";
+
     public static final Set<String> kwd = new HashSet<>();
     static {
         kwd.add("and");

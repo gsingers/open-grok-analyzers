@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.javascript;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class JavaScriptSymbolTokenizerFactory extends TokenizerFactory {
+public class JavaScriptSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new JavaScriptSymbolTokenizerFactory */
   public JavaScriptSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class JavaScriptSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public JavaScriptSymbolTokenizer create(AttributeFactory factory) {
     return new JavaScriptSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }

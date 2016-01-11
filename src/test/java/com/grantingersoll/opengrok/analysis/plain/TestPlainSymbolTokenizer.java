@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.plain;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -70,5 +71,17 @@ public class TestPlainSymbolTokenizer extends BaseTokenStreamTestCase {
                                                                     ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new PlainSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/plain", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new PlainSymbolTokenizer(newAttributeFactory());
+    assertEquals("Plain", tokenizer.getSourceCodeLanguage());
   }
 }

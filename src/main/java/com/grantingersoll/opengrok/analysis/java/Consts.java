@@ -30,6 +30,9 @@ import java.util.Set;
   * Holds static hash set containing the Java keywords
   */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "Java";
+    public static final String MIME_TYPE = "text/x-java-source";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         kwd.add( "abstract" );

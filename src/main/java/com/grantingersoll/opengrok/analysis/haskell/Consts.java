@@ -32,6 +32,9 @@ import java.util.Set;
  */
 
 public class Consts {
+    public static final String SOURCE_CODE_LANGUAGE = "Haskell";
+    public static final String MIME_TYPE = "text/x-haskell";
+
     public static final Set<String> kwd = new HashSet<>();
     static {
         // Haskell 2010 Language Report, Chapter 2.4

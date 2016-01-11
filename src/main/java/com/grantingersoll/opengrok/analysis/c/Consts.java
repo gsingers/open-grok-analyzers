@@ -31,6 +31,9 @@ import java.util.Set;
  */
 public class Consts {
 
+    public static final String SOURCE_CODE_LANGUAGE = "C";
+    public static final String MIME_TYPE = "text/x-csrc";
+
     public static final Set<String> kwd = new HashSet<>();
 
 

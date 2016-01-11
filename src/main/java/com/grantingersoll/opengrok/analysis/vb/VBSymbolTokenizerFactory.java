@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.vb;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class VBSymbolTokenizerFactory extends TokenizerFactory {
+public class VBSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new VBSymbolTokenizerFactory */
   public VBSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class VBSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public VBSymbolTokenizer create(AttributeFactory factory) {
     return new VBSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }

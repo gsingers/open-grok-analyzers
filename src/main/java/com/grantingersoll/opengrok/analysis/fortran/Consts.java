@@ -35,6 +35,9 @@ import java.util.Set;
  */
 public class Consts {
 
+    public static final String SOURCE_CODE_LANGUAGE = "Fortran";
+    public static final String MIME_TYPE = "text/x-fortran";
+
     public static final Set<String> kwd = new HashSet<>();
 
     static {

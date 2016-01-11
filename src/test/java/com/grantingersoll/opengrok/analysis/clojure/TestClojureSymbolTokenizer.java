@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.clojure;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -123,5 +124,17 @@ public class TestClojureSymbolTokenizer extends BaseTokenStreamTestCase {
                                                              ////             "(proxy [Object] [] (equals [o] (.toString nil)))")))))
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new ClojureSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-clojure", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new ClojureSymbolTokenizer(newAttributeFactory());
+    assertEquals("Clojure", tokenizer.getSourceCodeLanguage());
   }
 }

@@ -27,6 +27,9 @@ import java.util.Set;
  * @author Christoph Hofmann
   */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "C#";
+    public static final String MIME_TYPE = "text/x-csharp";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         // C# Keywords

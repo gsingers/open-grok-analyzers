@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.vb;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -143,5 +144,17 @@ public class TestVBSymbolTokenizer extends BaseTokenStreamTestCase {
                                                                                              ////
     };
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new VBSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-vbasic", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new VBSymbolTokenizer(newAttributeFactory());
+    assertEquals("Visual Basic", tokenizer.getSourceCodeLanguage());
   }
 }

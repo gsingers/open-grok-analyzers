@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.c;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,18 +33,28 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class CSymbolTokenizerFactory extends TokenizerFactory {
+public class CSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
-    /** Creates a new CSymbolTokenizerFactory */
-    public CSymbolTokenizerFactory(Map<String,String> args) {
-      super(args);
-      if (!args.isEmpty()) {
-        throw new IllegalArgumentException("Unknown parameters: " + args);
-      }
+  /** Creates a new CSymbolTokenizerFactory */
+  public CSymbolTokenizerFactory(Map<String,String> args) {
+    super(args);
+    if (!args.isEmpty()) {
+      throw new IllegalArgumentException("Unknown parameters: " + args);
     }
+  }
 
-    @Override
-    public CSymbolTokenizer create(AttributeFactory factory) {
-      return new CSymbolTokenizer(factory);
-    }
+  @Override
+  public CSymbolTokenizer create(AttributeFactory factory) {
+    return new CSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
+  }
 }

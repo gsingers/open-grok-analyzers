@@ -20,6 +20,7 @@
 package com.grantingersoll.opengrok.analysis.golang;
 
 
+import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -116,5 +117,17 @@ public class TestGolangSymbolTokenizer extends BaseTokenStreamTestCase {
                                                                                                                            //// }
     };                                                                                                                     ////
     assertAnalyzesTo(analyzer, input, output);
+  }
+
+  @Test
+  public void testMimeType() {
+    JFlexTokenizer tokenizer = new GolangSymbolTokenizer(newAttributeFactory());
+    assertEquals("text/x-go", tokenizer.getMimeType());
+  }
+
+  @Test
+  public void testSourceCodeLanguage() {
+    JFlexTokenizer tokenizer = new GolangSymbolTokenizer(newAttributeFactory());
+    assertEquals("Golang", tokenizer.getSourceCodeLanguage());
   }
 }

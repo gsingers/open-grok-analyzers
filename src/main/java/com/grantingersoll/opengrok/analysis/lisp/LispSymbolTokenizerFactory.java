@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.lisp;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class LispSymbolTokenizerFactory extends TokenizerFactory {
+public class LispSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new LispSymbolTokenizerFactory */
   public LispSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class LispSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public LispSymbolTokenizer create(AttributeFactory factory) {
     return new LispSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }

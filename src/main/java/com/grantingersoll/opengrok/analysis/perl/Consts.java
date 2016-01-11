@@ -29,6 +29,9 @@ import java.util.Set;
   * Holds static hash set containing the Perl keywords
   */
 public class Consts{
+    public static final String SOURCE_CODE_LANGUAGE = "Perl";
+    public static final String MIME_TYPE = "text/x-perl";
+
     public static final Set<String> kwd = new HashSet<>() ;
     static {
         kwd.add("abs");

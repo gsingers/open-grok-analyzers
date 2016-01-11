@@ -19,7 +19,7 @@
 
 package com.grantingersoll.opengrok.analysis.erlang;
 
-import org.apache.lucene.analysis.util.TokenizerFactory;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizerFactory;
 import org.apache.lucene.util.AttributeFactory;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ import java.util.Map;
  *   &lt;/analyzer&gt;
  * &lt;/fieldType&gt;</pre>
  */
-public class ErlangSymbolTokenizerFactory extends TokenizerFactory {
+public class ErlangSymbolTokenizerFactory extends SymbolTokenizerFactory {
 
   /** Creates a new ErlangSymbolTokenizerFactory */
   public ErlangSymbolTokenizerFactory(Map<String,String> args) {
@@ -46,5 +46,15 @@ public class ErlangSymbolTokenizerFactory extends TokenizerFactory {
   @Override
   public ErlangSymbolTokenizer create(AttributeFactory factory) {
     return new ErlangSymbolTokenizer(factory);
+  }
+
+  @Override
+  public String getMimeType() {
+    return Consts.MIME_TYPE;
+  }
+
+  @Override
+  public String getSourceCodeLanguage() {
+    return Consts.SOURCE_CODE_LANGUAGE;
   }
 }
