@@ -23,7 +23,6 @@
 package com.grantingersoll.opengrok.analysis;
 
 import com.grantingersoll.opengrok.analysis.plain.PlainSymbolTokenizerFactory;
-import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.util.ClasspathResourceLoader;
 import org.apache.lucene.analysis.util.ResourceLoaderAware;
 import org.apache.lucene.analysis.util.TokenizerFactory;
@@ -48,7 +47,7 @@ import java.util.regex.Pattern;
  */
 public class TokenizerGuru {
   /** Tokenizer factory to use when there is no file name/prefix/extension/magics match. */
-  private static final TokenizerFactory DEFAULT_TOKENIZER_FACTORY
+  private static final SymbolTokenizerFactory DEFAULT_TOKENIZER_FACTORY
       = new PlainSymbolTokenizerFactory(Collections.<String,String>emptyMap());
 
   /** Used in regex alternations for prefix matching */
@@ -58,17 +57,17 @@ public class TokenizerGuru {
     }};
 
   /** Maps full filenames to tokenizer factories. */
-  private static final Map<String,TokenizerFactory> FILE_NAMES = new HashMap<>();
+  private static final Map<String,SymbolTokenizerFactory> FILE_NAMES = new HashMap<>();
 
   /** Maps filename extensions to tokenizer factories. */
-  private static final Map<String,TokenizerFactory> FILE_EXTENSIONS = new HashMap<>();
+  private static final Map<String,SymbolTokenizerFactory> FILE_EXTENSIONS = new HashMap<>();
 
   /** Maps filename prefixes, sorted longest first, to tokenizer factories. */
-  private static final SortedMap<String,TokenizerFactory> FILE_PREFIXES
+  private static final SortedMap<String,SymbolTokenizerFactory> FILE_PREFIXES
       = new TreeMap<>(LONGEST_FIRST_SORT);
 
   /** Maps magic strings (content prefixes), sorted longest first, to tokenizer factories. */
-  private static final SortedMap<String,TokenizerFactory> FILE_MAGICS
+  private static final SortedMap<String,SymbolTokenizerFactory> FILE_MAGICS
       = new TreeMap<>(LONGEST_FIRST_SORT);
 
   /** Regex alternation of all filename prefixes, longest first */
@@ -93,7 +92,7 @@ public class TokenizerGuru {
 
   static {
     try {
-      Map<String,TokenizerFactory> factorySingletons = new HashMap<>();
+      Map<String,SymbolTokenizerFactory> factorySingletons = new HashMap<>();
 
       populateTokenizerFactoryMap(FILE_NAMES, "TokenizerFileNames.properties", factorySingletons);
       populateTokenizerFactoryMap(FILE_EXTENSIONS, "TokenizerFileExtensions.properties", factorySingletons);
@@ -125,7 +124,7 @@ public class TokenizerGuru {
    * @return If the map is sorted, returns a regex alternation of all map keys, otherwise null.
    */
   private static String populateTokenizerFactoryMap
-  (Map<String,TokenizerFactory> map, String propertiesFile, Map<String,TokenizerFactory> factorySingletons)
+  (Map<String,SymbolTokenizerFactory> map, String propertiesFile, Map<String,SymbolTokenizerFactory> factorySingletons)
       throws IOException {
     Properties values = new Properties();
     InputStream stream = TokenizerGuru.class.getResourceAsStream(propertiesFile);
@@ -133,9 +132,9 @@ public class TokenizerGuru {
     for (Map.Entry<Object,Object> entry : values.entrySet()) {
       String tokenizerSPIname = (String) entry.getKey();
       String valueList = (String) entry.getValue();
-      TokenizerFactory factory = factorySingletons.get(tokenizerSPIname);
+      SymbolTokenizerFactory factory = factorySingletons.get(tokenizerSPIname);
       if (factory == null) {
-        factory = TokenizerFactory.forName(tokenizerSPIname, Collections.<String, String>emptyMap());
+        factory = (SymbolTokenizerFactory)TokenizerFactory.forName(tokenizerSPIname, Collections.<String, String>emptyMap());
         if (factory instanceof ResourceLoaderAware) {
           ((ResourceLoaderAware)factory).inform(CLASSPATH_RESOURCE_LOADER);
         }
@@ -170,12 +169,12 @@ public class TokenizerGuru {
    * @param filename Name of the file to be analyzed
    * @return A tokenizer suited for that file content
    */
-  public static Tokenizer getTokenizer(Reader in, String filename) throws IOException {
-    TokenizerFactory factory = find(in, filename);
+  public static SymbolTokenizer getTokenizer(Reader in, String filename) throws IOException {
+    SymbolTokenizerFactory factory = find(in, filename);
     if (factory == null) {
       factory = DEFAULT_TOKENIZER_FACTORY;
     }
-    return factory.create();
+    return (SymbolTokenizer)factory.create();
   }
 
   /**
@@ -189,8 +188,8 @@ public class TokenizerGuru {
    * @param filename The filename to get the tokenizer factory for
    * @return the tokenizer factory to use
    */
-  public static TokenizerFactory find(Reader in, String filename) throws IOException {
-    TokenizerFactory factory = find(filename);
+  public static SymbolTokenizerFactory find(Reader in, String filename) throws IOException {
+    SymbolTokenizerFactory factory = find(filename);
     // TODO above is not that great, since if 2 analyzers share one extension
     // then only the first one registered will own it
     // it would be cool if above could return more analyzers and below would
@@ -207,8 +206,8 @@ public class TokenizerGuru {
    * @param filename The file name to get the tokenizer factory for
    * @return the tokenizer factory to use
    */
-  public static TokenizerFactory find(String filename) {
-    TokenizerFactory factory = null;
+  public static SymbolTokenizerFactory find(String filename) {
+    SymbolTokenizerFactory factory = null;
     String uppercaseBasename = new File(filename).getName().toUpperCase(Locale.ROOT);
     int lastDotPos = uppercaseBasename.lastIndexOf('.');
 
@@ -241,8 +240,8 @@ public class TokenizerGuru {
    * @return the tokenizer factory to use
    * @throws java.io.IOException if an error occurs while reading data from the reader
    */
-  public static TokenizerFactory find(Reader in) throws IOException {
-    TokenizerFactory factory = null;
+  public static SymbolTokenizerFactory find(Reader in) throws IOException {
+    SymbolTokenizerFactory factory = null;
     boolean shouldReset = false;
     try {
       if (in.markSupported()) {
@@ -271,8 +270,8 @@ public class TokenizerGuru {
    * @param contentPrefix known magic signatures will be matched against the content prefix
    * @return the tokenizer factory to use
    */
-  private static TokenizerFactory findMagic(String contentPrefix) {
-    TokenizerFactory factory = null;
+  private static SymbolTokenizerFactory findMagic(String contentPrefix) {
+    SymbolTokenizerFactory factory = null;
     Matcher matcher = FILE_MAGIC_PATTERN.matcher(contentPrefix);
     if (matcher.lookingAt()) {
       factory = FILE_MAGICS.get(matcher.group());

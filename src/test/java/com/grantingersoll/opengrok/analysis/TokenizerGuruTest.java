@@ -89,17 +89,17 @@ public class TokenizerGuruTest {
 
   @Test
   public void testHxxExtension() {
-    TokenizerFactory factory = TokenizerGuru.find("foo.hxx");
+    SymbolTokenizerFactory factory = TokenizerGuru.find("foo.hxx");
     assertNotNull(factory);
     assertSame(CxxSymbolTokenizerFactory.class, factory.getClass());
   }
 
   @Test
   public void testOneExtensionIsThePrefixOfAnother() {
-    TokenizerFactory factory1 = TokenizerGuru.find("main.c");
+    SymbolTokenizerFactory factory1 = TokenizerGuru.find("main.c");
     assertNotNull(factory1);
 
-    TokenizerFactory factory2 = TokenizerGuru.find("main.cc");
+    SymbolTokenizerFactory factory2 = TokenizerGuru.find("main.cc");
     assertNotNull(factory2);
 
     assertNotSame(factory1.getClass(), factory2.getClass());
@@ -107,7 +107,7 @@ public class TokenizerGuruTest {
 
   @Test
   public void matchesFullName() {
-    TokenizerFactory factory = TokenizerGuru.find("/path/to/Makefile");
+    SymbolTokenizerFactory factory = TokenizerGuru.find("/path/to/Makefile");
     assertSame(ShSymbolTokenizerFactory.class, factory.getClass());
 
     factory = TokenizerGuru.find("GNUMakefile");
