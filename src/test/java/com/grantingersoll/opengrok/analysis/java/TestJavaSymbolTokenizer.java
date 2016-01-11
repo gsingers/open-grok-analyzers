@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.java;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -133,13 +133,13 @@ public class TestJavaSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new JavaSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new JavaSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-java-source", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new JavaSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new JavaSymbolTokenizer(newAttributeFactory());
     assertEquals("Java", tokenizer.getSourceCodeLanguage());
   }
 }

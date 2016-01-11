@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.erlang;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -134,13 +134,13 @@ public class TestErlangSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new ErlangSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new ErlangSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-erlang", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new ErlangSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new ErlangSymbolTokenizer(newAttributeFactory());
     assertEquals("Erlang", tokenizer.getSourceCodeLanguage());
   }
 }

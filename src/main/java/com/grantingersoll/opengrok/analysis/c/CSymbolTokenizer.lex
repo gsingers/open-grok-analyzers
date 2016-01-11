@@ -26,13 +26,13 @@
  */
 
 package com.grantingersoll.opengrok.analysis.c;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
 %class CSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %type boolean
 %eofval{

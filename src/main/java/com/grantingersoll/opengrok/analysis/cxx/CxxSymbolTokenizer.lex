@@ -22,14 +22,14 @@
  */
 
 package com.grantingersoll.opengrok.analysis.cxx;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 
 %%
 %public
 %class CxxSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %type boolean
 %eofval{

@@ -26,7 +26,7 @@
  */
 
 package com.grantingersoll.opengrok.analysis.haskell;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.lucene.util.AttributeFactory;
 %%
 %public
 %class HaskellSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %init{
 super(in);

@@ -28,13 +28,13 @@
 package com.grantingersoll.opengrok.analysis.csharp;
 import java.io.IOException;
 import java.io.Reader;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
 %class CSharpSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %init{
 super(in);

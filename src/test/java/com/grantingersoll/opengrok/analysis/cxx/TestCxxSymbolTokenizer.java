@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.cxx;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -162,13 +162,13 @@ public class TestCxxSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new CxxSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new CxxSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-c++src", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new CxxSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new CxxSymbolTokenizer(newAttributeFactory());
     assertEquals("C++", tokenizer.getSourceCodeLanguage());
   }
 }

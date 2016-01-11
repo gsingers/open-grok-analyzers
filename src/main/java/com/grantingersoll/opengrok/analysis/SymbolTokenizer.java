@@ -40,7 +40,7 @@ import org.apache.lucene.util.AttributeFactory;
  *
  * @author Lubos Kosco
  */
-public abstract class JFlexTokenizer extends Tokenizer {
+public abstract class SymbolTokenizer extends Tokenizer {
 
     protected Stack<Integer> stack = new Stack<>();
 
@@ -68,17 +68,17 @@ public abstract class JFlexTokenizer extends Tokenizer {
     abstract protected void yysetreader(Reader in);
     
     //TODO can be removed once we figure out jflex generation of empty constructor
-    protected JFlexTokenizer(Reader in) {
+    protected SymbolTokenizer(Reader in) {
         super();
         this.yysetreader(input); // ignore the given reader
     }
     
-    protected JFlexTokenizer() {
+    protected SymbolTokenizer() {
         super();
         this.yysetreader(input);
     }
 
-    protected JFlexTokenizer(AttributeFactory factory) {
+    protected SymbolTokenizer(AttributeFactory factory) {
         super(factory);
         this.yysetreader(input);
     }

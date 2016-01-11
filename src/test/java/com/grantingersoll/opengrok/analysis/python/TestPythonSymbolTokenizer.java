@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.python;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -133,13 +133,13 @@ public class TestPythonSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new PythonSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new PythonSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-python", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new PythonSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new PythonSymbolTokenizer(newAttributeFactory());
     assertEquals("Python", tokenizer.getSourceCodeLanguage());
   }
 }

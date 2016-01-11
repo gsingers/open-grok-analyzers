@@ -22,14 +22,14 @@
  */
 
 package com.grantingersoll.opengrok.analysis.php;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 import java.util.*;
 
 %%
 %public
 %class PhpSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %init{
 super(in);

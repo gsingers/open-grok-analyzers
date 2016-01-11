@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.tcl;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -123,13 +123,13 @@ public class TestTclSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new TclSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new TclSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-tcl", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new TclSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new TclSymbolTokenizer(newAttributeFactory());
     assertEquals("Tcl", tokenizer.getSourceCodeLanguage());
   }
 }

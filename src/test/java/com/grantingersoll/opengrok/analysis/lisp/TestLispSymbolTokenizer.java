@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.lisp;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -101,13 +101,13 @@ public class TestLispSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new LispSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new LispSymbolTokenizer(newAttributeFactory());
     assertEquals("application/x-lisp", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new LispSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new LispSymbolTokenizer(newAttributeFactory());
     assertEquals("Lisp", tokenizer.getSourceCodeLanguage());
   }
 }

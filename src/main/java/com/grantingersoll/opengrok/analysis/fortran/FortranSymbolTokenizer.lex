@@ -24,13 +24,13 @@
 package com.grantingersoll.opengrok.analysis.fortran;
 import java.io.IOException;
 import java.io.Reader;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
 %class FortranSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %init{
 super(in);

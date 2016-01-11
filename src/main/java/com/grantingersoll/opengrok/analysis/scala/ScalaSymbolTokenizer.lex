@@ -26,13 +26,13 @@
  */
 
 package com.grantingersoll.opengrok.analysis.scala;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 
 %%
 %public
 %class ScalaSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %init{
 super(in);
 %init}

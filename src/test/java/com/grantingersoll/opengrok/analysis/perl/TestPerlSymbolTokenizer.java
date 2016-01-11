@@ -20,7 +20,7 @@
 package com.grantingersoll.opengrok.analysis.perl;
 
 
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.BaseTokenStreamTestCase;
@@ -128,13 +128,13 @@ public class TestPerlSymbolTokenizer extends BaseTokenStreamTestCase {
 
   @Test
   public void testMimeType() {
-    JFlexTokenizer tokenizer = new PerlSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new PerlSymbolTokenizer(newAttributeFactory());
     assertEquals("text/x-perl", tokenizer.getMimeType());
   }
 
   @Test
   public void testSourceCodeLanguage() {
-    JFlexTokenizer tokenizer = new PerlSymbolTokenizer(newAttributeFactory());
+    SymbolTokenizer tokenizer = new PerlSymbolTokenizer(newAttributeFactory());
     assertEquals("Perl", tokenizer.getSourceCodeLanguage());
   }
 }

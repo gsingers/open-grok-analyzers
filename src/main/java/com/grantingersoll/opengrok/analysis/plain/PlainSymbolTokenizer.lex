@@ -22,12 +22,12 @@
  */
 
 package com.grantingersoll.opengrok.analysis.plain;
-import com.grantingersoll.opengrok.analysis.JFlexTokenizer;
+import com.grantingersoll.opengrok.analysis.SymbolTokenizer;
 import org.apache.lucene.util.AttributeFactory;
 %%
 %public
 %class PlainSymbolTokenizer
-%extends JFlexTokenizer
+%extends SymbolTokenizer
 %unicode
 %type boolean
 %eofval{
